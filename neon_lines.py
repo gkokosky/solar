@@ -3,6 +3,8 @@ Data analysis ...
 """
 
 from astropy.io import fits
+from scipy import signal
+from scipy import optimize
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -16,12 +18,18 @@ for i in range(1,10):
 #plt.imshow(neon_set[1], cmap = 'gray', norm='log')
 
 data = neon_set[0]
-print(data)
-data = data[:,700:1400]
+data = data[:,735:1500]
 
 intensity_profile = np.sum(data, axis=0)
-print(intensity_profile)
 plt.plot(intensity_profile)
 
 # bekende peiken (spectraallijnen) van neon, in nanometer (nm)
 known_neon_lines = [5852.49, 5881.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99, 6402.25, 6506.53, 6532.88, 6598.95, 6678.28, 6717.04, 6929.47, 7032.41, 7173.94, 7245.17, 7438.90]
+
+pixel_peaks = signal.find_peaks(intensity_profile, height=400000)[0].tolist()
+del pixel_peaks[-1]
+known_neon_lines = [5852.49, 5881.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99, 6402.25, 6506.53, 6532.88, 6598.95, 6678.28, 6717.04, 6929.47, 7032.41, 7173.94]
+print(len(pixel_peaks), len(known_neon_lines))
+
+plt.figure()
+plt.plot(pixel_peaks, known_neon_lines, 'o')
