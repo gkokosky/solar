@@ -4,7 +4,7 @@ Data analysis ...
 
 from astropy.io import fits
 from scipy import signal
-from scipy import optimize
+from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -47,3 +47,14 @@ plt.figure()
 plt.plot(pixel_peaks, known_neon_lines, 'o')
 plt.xlabel('pixels')
 plt.ylabel('wavelength (nm)')
+
+def function(x,a,b,c):
+    
+    return a*x**2 + b*x + c
+
+params = curve_fit(function, pixel_peaks, known_neon_lines)[0]
+print(params)
+
+x_fit = np.linspace(pixel_peaks[0], pixel_peaks[-1], num=300)
+y_fit = function(x_fit,*params)
+plt.plot(x_fit,y_fit)
