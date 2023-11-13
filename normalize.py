@@ -1,6 +1,6 @@
 from neon_lines import params
 from astropy.io import fits
-from astropy.modeling import models, fitting
+from lmfit.models import ExponentialGaussianModel, SkewedGaussianModel, GaussianModel
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
@@ -47,15 +47,34 @@ class Normalize:
         
     def curve_fit(self):
         
-        x = [i for i in range(len(self.x))]
+        x = np.array([i for i in range(len(self.x))])
         y = -1 * self.x
         
+        eg_model = SkewedGaussianModel()
+        pars = eg_model.guess(y, x=x)
+        result = eg_model.fit(y,pars,x=x)
         
+        self.fit = result.best_fit
+        
+        return x, result.best_fit
+    
+    def normalize(self):
+        
+        norm_function = self.fit/self.x
+        return norm_function
         
 data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
 degrees = str('200')
 meting = Normalize(degrees, data_folder)
 wave = meting.pixel_to_wavelength(params)
+x, fit = meting.curve_fit()
+
+norm = meting.normalize()
 
 plt.figure()
 plt.plot(-1 * wave,'o', markersize=0.5)
+plt.plot(x, fit)
+
+plt.figure()
+plt.plot(x,norm,'o',markersize=0.5)
+plt.ylim(-3,0)
