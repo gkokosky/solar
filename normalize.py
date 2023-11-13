@@ -6,7 +6,10 @@ import matplotlib.pyplot as plt
 class Normalize:
     
     def __init__(self,degrees,data_folder):
-        
+        """ Initializes data from 10 measurements.
+        Returns unprocessed dataset.
+        """
+        self.x = np.array([])
         self.dataset = []
         for i in range(1,10):
             data = fits.getdata(f'{data_folder}/{degrees}deg-00{i}.fit')
@@ -14,7 +17,9 @@ class Normalize:
         self.dataset.append(fits.getdata(f'{data_folder}/{degrees}deg-010.fit'))
         
     def pixel_to_wavelength(self, pars):
-        
+        """ Reduces dataset to 1D array and converts pixels on x-axis
+        to wavelength in nm using known wavelengths of neon. 
+        """
         reduced_dataset = []
         for j in self.dataset:
             reduced_data = np.sum(j, axis=0)
@@ -30,8 +35,9 @@ class Normalize:
 
         self.x = a * x_pixel**2 + b * x_pixel + c  
         return(self.x)
-            
-        
+    
+    def mask_peaks(self):
+      pass      
 data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
 degrees = str('200')
 meting = Normalize(degrees, data_folder)
