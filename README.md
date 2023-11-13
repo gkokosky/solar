@@ -1,0 +1,2 @@
+# solar
+practicum zonnefysica 
