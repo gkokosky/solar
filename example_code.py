@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 # Load an image and show the array
 
 # data = fits.getdata('C:/OBSERVATIONS/Masters/M101/M101_L.fit')
-data = fits.getdata('C:/OBSERVATIONS/Masters/NGC 1491/NGC1491 Ha_master.fit')
+data = fits.getdata()
 
 print(data)
 print('shape of array:', data.shape)
