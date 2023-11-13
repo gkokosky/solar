@@ -2,6 +2,7 @@ from neon_lines import params
 from astropy.io import fits
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
 
 class Normalize:
     
@@ -37,7 +38,11 @@ class Normalize:
         return(self.x)
     
     def mask_peaks(self):
-      pass      
+        """ Masks absorption peaks for propper normalization.       
+        """        
+        peaks = find_peaks(self.x)
+        
+        
 data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
 degrees = str('200')
 meting = Normalize(degrees, data_folder)

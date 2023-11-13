@@ -33,7 +33,8 @@ def neondata():
     
 # crop to effective data, plot
 data = neondata()[735:1320]
-plt.plot(data)
+
+#plt.plot(data)
 
 # known neon absorption peaks in angstrom, converted to nm
 known_neon_lines = 0.1 * np.array([5852.49, 5881.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99, 6402.25, 6506.53, 6532.88, 6598.95, 6678.28, 6717.04, 6929.47, 7032.41, 7173.94, 7245.17, 7438.90])
@@ -43,10 +44,7 @@ known_neon_lines = np.delete(known_neon_lines, np.s_[-2:])
 
 pixel_peaks = signal.find_peaks(data, height=400000)[0]
 
-plt.figure()
-plt.plot(pixel_peaks, known_neon_lines, 'o')
-plt.xlabel('pixels')
-plt.ylabel('wavelength (nm)')
+
 
 def function(x,a,b,c):
     
@@ -55,4 +53,10 @@ def function(x,a,b,c):
 params = curve_fit(function, pixel_peaks, known_neon_lines)[0]
 
 x_fit = np.linspace(pixel_peaks[0], pixel_peaks[-1], num=300)
+
+
+plt.figure()
+plt.plot(pixel_peaks, known_neon_lines, 'o')
 plt.plot(x_fit,function(x_fit, *params))
+plt.xlabel('pixels')
+plt.ylabel('wavelength (nm)')
