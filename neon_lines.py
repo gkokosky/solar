@@ -53,8 +53,6 @@ def function(x,a,b,c):
     return a*x**2 + b*x + c
 
 params = curve_fit(function, pixel_peaks, known_neon_lines)[0]
-print(params)
 
 x_fit = np.linspace(pixel_peaks[0], pixel_peaks[-1], num=300)
-y_fit = function(x_fit,*params)
-plt.plot(x_fit,y_fit)
+plt.plot(x_fit,function(x_fit, *params))
