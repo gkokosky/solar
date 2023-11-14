@@ -1,4 +1,4 @@
-from neon_lines import params
+from neon_lines import a, b, c
 from astropy.io import fits
 from lmfit.models import ExponentialGaussianModel, SkewedGaussianModel, GaussianModel
 import numpy as np
@@ -18,7 +18,7 @@ class Normalize:
             self.dataset.append(data)
         self.dataset.append(fits.getdata(f'{data_folder}/{degrees}deg-010.fit'))
         
-    def pixel_to_wavelength(self, pars):
+    def pixel_to_wavelength(self):
         """ Reduces dataset to 1D array and converts pixels on x-axis
         to wavelength in nm using known wavelengths of neon. 
         """
@@ -30,10 +30,6 @@ class Normalize:
         reduced_dataset = np.array(reduced_dataset)
         x_pixel = np.mean(reduced_dataset, axis=0)
         x_pixel_err = np.std(reduced_dataset, axis=0) / np.sqrt(10)
-        
-        a = pars[0]
-        b = pars[1]
-        c = pars[2]
 
         self.x = a * x_pixel**2 + b * x_pixel + c  
         return(self.x)
@@ -66,7 +62,7 @@ class Normalize:
 data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
 degrees = str('200')
 meting = Normalize(degrees, data_folder)
-wave = meting.pixel_to_wavelength(params)
+wave = meting.pixel_to_wavelength()
 x, fit = meting.curve_fit()
 
 norm = meting.normalize()
