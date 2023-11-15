@@ -5,7 +5,6 @@ Data analysis ...
 from astropy.io import fits
 from lmfit.models import Model
 from scipy import signal
-from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
@@ -23,7 +22,7 @@ def neondata():
         data = fits.getdata(name)
         neon_set.append(data)
         
-    p_final = Path(__file__).with_name(f'neon-010.fit')
+    p_final = Path(__file__).with_name('neon-010.fit')
     name_final = p_final.absolute()
     neon_set.append(fits.getdata(name_final))
     
