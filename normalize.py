@@ -62,6 +62,10 @@ class Normalize:
         plt.figure()
         plt.plot(x,y,'o',markersize=0.5)
         plt.plot(x,result.best_fit)
+        plt.rcParams['figure.dpi'] = 300
+        plt.xlabel('wavelength (nm)')
+        plt.ylabel('relative intensity')
+        plt.savefig('fit.png')
         
         self.fit = result.best_fit
         
@@ -87,4 +91,9 @@ plt.figure()
 plt.plot(x, y)
 
 plt.figure()
-plt.plot(xn,-1*yn+1)
+plt.plot(xn,-1*yn+1,'o', markersize=0.5)
+plt.ylim(-1,0.5)
+plt.rcParams['figure.dpi'] = 300
+plt.xlabel('wavelength (nm)')
+plt.ylabel('relative intensity')
+plt.savefig('normalize.png')

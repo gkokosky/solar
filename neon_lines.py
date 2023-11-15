@@ -62,6 +62,7 @@ plt.plot(pixel_peaks, known_neon_lines, 'o')
 plt.plot(pixel_peaks, result.best_fit)
 plt.xlabel('pixels')
 plt.ylabel('wavelength (nm)')
+plt.savefig('pixel_to_wavelength.png')
 
 a = result.params['a'].value
 b = result.params['b'].value
