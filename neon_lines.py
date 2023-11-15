@@ -8,6 +8,7 @@ from scipy import signal
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import numpy as np
+from pathlib import Path
 
 def neondata():
     """ Takes 10 different measurements of the neon absorption spectrum.
@@ -17,10 +18,14 @@ def neondata():
     neon_set = []
     for i in range(1,10):
         
-        data = fits.getdata(f'/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/calibration/neon-00{i}.fit')
+        p = Path(__file__).with_name(f'neon-00{i}.fit')
+        name = p.absolute()
+        data = fits.getdata(name)
         neon_set.append(data)
         
-    neon_set.append(fits.getdata('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/calibration/neon-010.fit'))
+    p_final = Path(__file__).with_name(f'neon-010.fit')
+    name_final = p_final.absolute()
+    neon_set.append(fits.getdata(name_final))
     
     reduced_neon_set = []
     for j in neon_set:
