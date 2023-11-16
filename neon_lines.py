@@ -8,6 +8,8 @@ from scipy import signal
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
+import statsmodels.api as sm
+#from statsmodels.formula.api.models import ols
 
 def neondata():
     """ Takes 10 different measurements of the neon absorption spectrum.
@@ -42,13 +44,11 @@ plt.figure()
 plt.plot(data, 'o', markersize = 0.75)
 # known neon absorption peaks in angstrom, converted to nm
 known_neon_lines = 0.1 * np.array([5852.49, 5881.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99, 6402.25, 6506.53, 6532.88, 6598.95, 6678.28, 6717.04, 6929.47, 7032.41, 7173.94, 7245.17, 7438.90])
-
+known_neon_lines_unmultiplied = [5852.49, 5881.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99, 6402.25, 6506.53, 6532.88, 6598.95, 6678.28, 6717.04, 6929.47, 7032.41, 7173.94, 7245.17, 7438.90]
 # convert to nm
 known_neon_lines = np.delete(known_neon_lines, np.s_[-2:])
 
 pixel_peaks = signal.find_peaks(data, height=400000)[0]
-
-
 
 def function(x,a,b,c):
     
@@ -67,3 +67,21 @@ plt.savefig('pixel_to_wavelength.png')
 a = result.params['a'].value
 b = result.params['b'].value
 c = result.params['c'].value
+
+def calculate_residuals():
+    residual_list = []
+    # residual is verschil tussen fit-waarde en neon waarde
+    for i in known_neon_lines_unmultiplied:
+        error = np.abs(i - result.best_fit)
+        residual_list.append(error)
+            
+    return residual_list
+
+# residual plot
+plt.figure()
+plt.title("residual plot")
+plt.plot(pixel_peaks, calculate_residuals(), 'o')
+plt.xlabel('x-value = pixel')
+plt.ylabel('y-value = residual')
+plt.show()
+
