@@ -35,6 +35,7 @@ class Normalize:
         x_pixel = np.array([i for i in range(len(y_pixel))])
 
         self.x = a * x_pixel**2 + b * x_pixel + c
+        self.x = self.x * 0.1
         self.y = np.array(y_pixel)
 
 
@@ -140,8 +141,8 @@ degrees = str('06')
 measurement=str('002')
 
 meting = Normalize(data_folder, degrees, measurement)
-x, y = meting.isolate(740,770)
-xm,ym=meting.mask_peak(759)
+x, y = meting.isolate(510,540)
+xm,ym=meting.mask_peak(520)
 meting.curve_fit()
 y_norm = meting.normalize()
 
