@@ -34,11 +34,13 @@ def neondata():
         
     reduced_neon_set = np.array(reduced_neon_set)
     avg = np.mean(reduced_neon_set, axis=0)
+    err = np.std(reduced_neon_set, axis=0) / np.sqrt(10)
 
-    return avg
+    return avg, err
     
 # crop to effective data, plot
-data = neondata()[735:1320]
+data, err = neondata()
+data, err = data[735:1320], err[735:1320]
 plt.figure()
 plt.plot(data, 'o', markersize = 0.75)
 # known neon absorption peaks in angstrom, converted to nm
@@ -71,8 +73,6 @@ plt.plot(pixel_peaks,result.residual,'o')
 a = result.params['a'].value
 b = result.params['b'].value
 c = result.params['c'].value
-
-
 
 
 # def calculate_residuals():

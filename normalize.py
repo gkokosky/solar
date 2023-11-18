@@ -59,8 +59,8 @@ class Normalize:
         
         return self.x, self.y
         
-    def mask_peak(self):
-        """Finds the largest peak (the absorption peak), and masks it for proper
+    def mask_peak(self, wavelength):
+        """Finds the absorption peak, and masks it for proper
         normalization.
         """
         
@@ -68,8 +68,11 @@ class Normalize:
         y = self.y
         
         peaks, _ = find_peaks(-y)
-        peak = peaks[np.argmin(y[peaks])]
         
+        peak_diff = np.abs(x[peaks] - wavelength)
+        print(peak_diff)
+        peak = np.argmin(peak_diff)
+        peak = peaks[peak]
         width, _, _, _ = peak_widths(-y, np.array([peak]))
         
         # find leftmost part of peak
@@ -124,7 +127,7 @@ class Normalize:
         y = self.y
         
         y_fit = np.array(self.a * x **2 + self.b * x + self.c)
-        print(y_fit)
+
         plt.figure()
         plt.plot(x,y)
         plt.plot(x,y_fit)
@@ -135,4 +138,18 @@ class Normalize:
 data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
 degrees = str('06')
 measurement=str('002')
+
+meting = Normalize(data_folder, degrees, measurement)
+x, y = meting.isolate(740,770)
+xm,ym=meting.mask_peak(759)
+meting.curve_fit()
+y_norm = meting.normalize()
+
+plt.figure()
+plt.plot(x,y,'o')
+plt.plot(xm,ym,'o')
+
+plt.figure()
+plt.plot(x,y_norm)
+
 
