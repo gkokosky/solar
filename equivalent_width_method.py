@@ -308,8 +308,8 @@ plt.show()
 
 # EQUIVALENT WIDTH BEPALEN 
 # hierbij word gebruik gemaakt van de specutils package
-element_1 = equivalent_width(spectrum_1, regions=SpectralRegion(6643.0*u.AA,6644*u.AA))
-element_2 = equivalent_width(spectrum_1, regions=SpectralRegion(6645.0*u.AA,6645.5*u.AA))
+element_1 = equivalent_width(spec1, regions=SpectralRegion(6643.0*u.AA,6644*u.AA))
+element_2 = equivalent_width(spec1, regions=SpectralRegion(6645.0*u.AA,6645.5*u.AA))
 ratio = element_2/element_1
 
 # Afronding
