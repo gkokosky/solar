@@ -260,7 +260,6 @@ plt.figure()
 plt.plot(x,yn)
 
 # intensity profile
-
 neon_set = []
 for i in range(1,10):
     
@@ -277,22 +276,20 @@ intensity_profile = np.sum(data, axis=0)
 plt.plot(intensity_profile)
 plt.xlim(0,200)
 
-
 print(intensity_profile)
 
 # RECHTHOEK MAKEN
+# er wordt gebruik gemaakt van matplotlib tranforms
 
-# hier plotten we een golflengte vs intensiteits grafiek (genormaliseerd)
-# onderstaande was van internet
-fig2, ax2 = plt.subplots()
-fig2.suptitle(' Equivalent Width', fontsize='24')
+# fig2, ax2 = plt.subplots()
+# fig2.suptitle('...', fontsize='24')
 
-ax2.plot(golflengte_1, relative_intensity_1)
+# ax2.plot(golflengte_1, relative_intensity_1)
 
-plt.xlabel('λ (Å)',fontsize='20')
-plt.ylabel('Relative flux', fontsize='20')
+# plt.xlabel('λ (Å)',fontsize='20')
+# plt.ylabel('Relative flux', fontsize='20')
 
-ax2.set_xlim([6643.3,6644])
+# ax2.set_xlim([6643.3,6644])
 
 # Fill in the area under the curve and overlay a rectangle of equal area.
 # Green area
@@ -319,5 +316,4 @@ element_2 = np.round(element_2,3)
 ratio = np.round(ratio,3)
 
 # Print the Equivalent width and ratio of abundance
-print('EW Ni I 6643A\tEW Eu II 6645 A\tEu/Ni\tName') # Print a header row
 print(str(element_1)+'\t'+str(element_2)+'\t'+str(ratio)+'\t'+label1) # Print for target 1
