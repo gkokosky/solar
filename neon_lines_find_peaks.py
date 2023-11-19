@@ -10,7 +10,7 @@ import numpy as np
 neon_set = []
 for i in range(1,10):
     
-    data = fits.getdata(f'/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/calibration/neon-00{i}.fit')
+    data = fits.getdata(f'C:\Users\Femke\Desktop\NS_jaar_3\Periode_2\NSP2\data_mapje\LISA data\Verschillende hoogtes\Sky_angles')
     neon_set.append(data)
     
 #plt.imshow(neon_set[1], cmap = 'gray', norm='log')
