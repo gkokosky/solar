@@ -21,6 +21,7 @@ class Normalize:
         self.y = np.array([])
         self.x_masked = np.array([])
         self.y_masked = np.array([])
+        self.smooth_y = np.array([])
         
         self.data = fits.getdata(f'{data_folder}/{degrees}deg-{measurement}.fit')
         
@@ -71,10 +72,11 @@ class Normalize:
         peaks, _ = find_peaks(-y)
         
         peak_diff = np.abs(x[peaks] - wavelength)
-        print(peak_diff)
         peak = np.argmin(peak_diff)
         peak = peaks[peak]
         width, _, _, _ = peak_widths(-y, np.array([peak]))
+        
+        width = 0.5*width
         
         # find leftmost part of peak
         x_left = x[peak] - width
@@ -97,16 +99,16 @@ class Normalize:
         return self.x_masked, self.y_masked
         
 
-    # def smooth_function(self):
+    def smooth_function(self):
         
-    #     y = self.y
-    #     self.smooth_y = gaussian_filter1d(y,sigma=1)
-    #     return self.smooth_y        
+        y = self.y_masked
+        self.smooth_y = gaussian_filter1d(y,sigma=3)
+        return self.smooth_y        
 
     def curve_fit(self):
         
         x = self.x_masked
-        y = self.y_masked
+        y = self.smooth_y
         
         def function(x, a, b, c):
             return a * x**2 + b*x + c
@@ -130,27 +132,30 @@ class Normalize:
         y_fit = np.array(self.a * x **2 + self.b * x + self.c)
 
         plt.figure()
-        plt.plot(x,y)
+        plt.plot(x,y,'o')
         plt.plot(x,y_fit)
         
         y_norm = y / y_fit
         return y_norm
         
 data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
-degrees = str('06')
+degrees = str('30')
 measurement=str('002')
 
 meting = Normalize(data_folder, degrees, measurement)
-x, y = meting.isolate(510,540)
-xm,ym=meting.mask_peak(520)
+x, y = meting.isolate(430,445)
+
+xm,ym = meting.mask_peak(438)
+ys=meting.smooth_function()
 meting.curve_fit()
-y_norm = meting.normalize()
+yn = meting.normalize()
 
 plt.figure()
 plt.plot(x,y,'o')
 plt.plot(xm,ym,'o')
+plt.plot(xm,ys,'o')
 
 plt.figure()
-plt.plot(x,y_norm)
+plt.plot(x,yn)
 
 
