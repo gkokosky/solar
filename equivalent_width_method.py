@@ -29,6 +29,7 @@ from astropy.io import fits
 from lmfit.models import Model
 from scipy.signal import find_peaks
 from pathlib import Path
+import Pylance
 
 # DATA IMPORTEREN
 def neondata():
@@ -280,16 +281,17 @@ print(intensity_profile)
 
 # RECHTHOEK MAKEN
 # er wordt gebruik gemaakt van matplotlib tranforms
+# dit werkt nog niet samen met de rest ^
 
-# fig2, ax2 = plt.subplots()
-# fig2.suptitle('...', fontsize='24')
+fig2, ax2 = plt.subplots()
+fig2.suptitle('...', fontsize='24')
 
-# ax2.plot(golflengte_1, relative_intensity_1)
+ax2.plot(golflengte_1, relative_intensity_1)
 
-# plt.xlabel('λ (Å)',fontsize='20')
-# plt.ylabel('Relative flux', fontsize='20')
+plt.xlabel('λ (Å)',fontsize='20')
+plt.ylabel('Relative flux', fontsize='20')
 
-# ax2.set_xlim([6643.3,6644])
+ax2.set_xlim([6643.3,6644])
 
 # Fill in the area under the curve and overlay a rectangle of equal area.
 # Green area
