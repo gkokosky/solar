@@ -5,13 +5,8 @@ Created on Sun Nov 19 14:06:46 2023
 @author: Femke
 """
 # equivalent width method script
-# NumPy is a common library for handling mathy things.
 import numpy as np
-
-# SciPy allows for things like interpolation and curve fitting.
 from scipy.interpolate import make_interp_spline, BSpline
-
-# MatPlotLib is the most common way to visualize data in Python.
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-talk')
 
@@ -24,74 +19,90 @@ from astropy.io import fits
 from astropy import units as u
 from astropy.visualization import quantity_support
 quantity_support()
+# comes in handy when determinign the eq. width
 from astropy.utils.data import download_file
 from specutils import Spectrum1D
 from specutils import SpectralRegion
 from specutils.analysis import equivalent_width
 from specutils.analysis import fwhm
+from astropy.io import fits
+from lmfit.models import Model
+from scipy.signal import find_peaks
+from pathlib import Path
 
 # DATA IMPORTEREN
+def neondata():
+    """ Takes 10 different measurements of the neon absorption spectrum.
+    Returns the average of these measurements as a 1D-array
+    """
+    
+    neon_set = []
+    for i in range(1,10):
+        
+        p = Path(__file__).with_name(f'neon-00{i}.fit')
+        name = p.absolute()
+        data = fits.getdata(name)
+        neon_set.append(data)
+        
+    p_final = Path(__file__).with_name('neon-010.fit')
+    name_final = p_final.absolute()
+    neon_set.append(fits.getdata(name_final))
+    
+    reduced_neon_set = []
+    for j in neon_set:
+        reduced_data = np.sum(j, axis=0)
+        reduced_neon_set.append(reduced_data)
+        
+    reduced_neon_set = np.array(reduced_neon_set)
+    avg = np.mean(reduced_neon_set, axis=0)
+    err = np.std(reduced_neon_set, axis=0) / np.sqrt(10)
+
+    return avg, err
+    
+# crop to effective data, plot
+data, err = neondata()
+
+# make data x and y instead of just y
+x = np.array([i for i in range(len(data))])[735:1050]
+y = np.array(data)[735:1050]
 
 
-# SPECTRUM PLOT
-def interp(w, f):
-  wInterp = np.linspace(w.min(),w.max(), 300)
-  spl = make_interp_spline(w, f)
-  fInterp = spl(wInterp)
-  return wInterp, fInterp
+peaks, _ = find_peaks(y, height=500000)
+plt.figure()
+plt.plot(x,y)
+plt.plot(x[peaks],y[peaks],'o')
 
-# Interpolate the data for smoother plots
-wave1, flux1 = interp(wave1,flux1)
+neon_lines = [5852.49, 5891.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99,6402.25,6506.53, 6532.88,6598.95]
 
-# Add units to the fluxes and wavelengths
-flux1 = flux1*u.Unit('erg cm-2 s-1 AA-1')
-wave1 = wave1*u.AA
-fig, ax = plt.subplots()
-fig.suptitle('Eu II Absorption Detection', fontsize='24')
+# FIT EN PLOT
+def function(x,a,b,c):
+    
+     return a*x**2 + b*x + c
 
-# Add the other plots here
-ax.plot(wave1, flux1, label=label1)
+pixel_peaks = x[peaks]
+model = Model(function)
+result = model.fit(neon_lines, x=pixel_peaks, a=1,b=1,c=1)
 
-# This displays 2 lines to mark Ni I and Eu II line locations.
-plt.axvline(x=6645.127,ls=':')
-plt.axvline(x=6643.638,ls=':')
+plt.figure()
+plt.plot(pixel_peaks, neon_lines, 'o')
+plt.plot(pixel_peaks, result.best_fit)
+plt.xlabel('pixels')
+plt.ylabel('wavelength (nm)')
+plt.savefig('pixel_to_wavelength.png')
 
-# This labels the x-axis and y-axis
-plt.xlabel('λ (Å)',fontsize='20')
-plt.ylabel('Relative flux', fontsize='20')
+# plot of residuals (which we do not have yet)
+# plt.figure()
+# plt.plot(pixel_peaks,result.residual,'o')
 
-# Display a grid
-plt.grid(True)
-
-# Turn on the legend.
-ax.legend(loc='best')
-
-# Display all the things we've setup.
-plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+a = result.params['a'].value
+b = result.params['b'].value
+c = result.params['c'].value
 
 
 # Rechthoek maken
 # Plot one of our stars and annotate the equivalent width.
 fig2, ax2 = plt.subplots()
-fig2.suptitle('Ni I Equivalent Width', fontsize='24')
+fig2.suptitle(' Equivalent Width', fontsize='24')
 
 ax2.plot(wave1, flux1)
 
@@ -126,6 +137,6 @@ ni1 = np.round(ni1,3)
 eu1 = np.round(eu1,3)
 r1 = np.round(r1,3)
 
-# Print the EW or Ni I, Eu II, and their ratio.
+# Print the Equivalent width and ratio
 print('EW Ni I 6643A\tEW Eu II 6645 A\tEu/Ni\tName') # Print a header row
 print(str(ni1)+'\t'+str(eu1)+'\t'+str(r1)+'\t'+label1) # Print for target 1

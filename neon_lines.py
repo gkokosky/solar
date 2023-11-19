@@ -2,7 +2,7 @@
 Data analysis ...
 """
 
-from astropy.io import fits
+from astropy.io import fits 
 from lmfit.models import Model
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
