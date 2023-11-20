@@ -2,6 +2,7 @@ from neon_lines import a, b, c
 from astropy.io import fits
 import numpy as np
 import matplotlib.pyplot as plt
+import pathlib
 from scipy.signal import find_peaks, peak_widths
 from scipy.ndimage import gaussian_filter1d
 from lmfit import Model
@@ -23,7 +24,8 @@ class Normalize:
         self.y_masked = np.array([])
         self.smooth_y = np.array([])
         
-        self.data = fits.getdata(f'{data_folder}/{degrees}deg-{measurement}.fit')
+        file = pathlib.Path(str(data_folder), str(f'{degrees}deg-{measurement}.fit'))
+        self.data = fits.getdata(file)
         
         self.a = 0
         self.b = 0
