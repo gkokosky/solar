@@ -9,7 +9,6 @@ from normalize import Normalize
 import numpy as np
 from scipy.interpolate import make_interp_spline, BSpline
 import matplotlib.pyplot as plt
-plt.style.use('seaborn-talk')
 from astropy.io import fits
 # MatPlotLib tools for drawing on plots.
 import matplotlib.transforms as mtransforms
@@ -21,17 +20,50 @@ from astropy import units as u
 from astropy.visualization import quantity_support
 quantity_support()
 # comes in handy when determinign the eq. width
-from astropy.utils.data import download_file
-from specutils import Spectrum1D
-from specutils import SpectralRegion
-from specutils.analysis import equivalent_width
-from specutils.analysis import fwhm
-from astropy.io import fits
 from lmfit.models import Model
 from scipy.signal import find_peaks
 from pathlib import Path
-import Pylance
         
+    
+data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
+degrees = str('30')
+measurement=str('002')
+
+meting = Normalize(data_folder, degrees, measurement)
+meting.isolate(640,670)
+meting.mask_peak(656, 0.5)
+meting.smooth_function(10)
+meting.curve_fit()
+x, y = meting.normalize()
+
+
+# isolate further for peak only
+def isolate(x, y, min,max):
+    """Isolates specific wavelength range, so that only one absorption peak is found. 
+    
+    Args:
+        min (float): lowest wavelength in range to analyze
+        max (float): highest wavelength in range to analyze
+    """
+    
+    # finds smallest difference between x and min/max
+    min_diff = np.abs(x - min)
+    max_diff = np.abs(x - max)
+    
+    # finds index associated with these values
+    min_idx = min_diff.argmin()
+    max_idx = max_diff.argmin()
+    
+    x = x[min_idx:max_idx+1]
+    y = y[min_idx:max_idx+1]
+    
+    return x, y
+
+
+x,y = isolate(x,y, 654,660)
+plt.figure()
+plt.plot([640,680])
+plt.plot(x,y,'o')
 
 # RECHTHOEK MAKEN
 # er wordt gebruik gemaakt van matplotlib tranforms
@@ -51,8 +83,8 @@ import Pylance
 # # Green area
 # trans = mtransforms.blended_transform_factory(ax.transData, ax.transAxes)
 # ax2.fill_between(golflengte_1, 1, relative_intensity_1, where=relative_intensity_1 < 1*u.Unit('erg cm-2 s-1 AA-1'),
-#                  facecolor='green', interpolate=True, alpha=0.3)
-# # Dark gray area.
+#                   facecolor='green', interpolate=True, alpha=0.3)
+# Dark gray area.
 # ax2.add_patch(plt.Rectangle((.29, .045), .358, 0.85, ec='k', fc="k",
 #                             alpha=0.3,  transform=ax2.transAxes))
 

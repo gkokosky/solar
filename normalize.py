@@ -138,30 +138,4 @@ class Normalize:
         plt.plot(x,y_fit)
         
         y_norm = y / y_fit
-        return y_norm
-    
-data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
-degrees = str('30')
-measurement=str('002')
-
-meting = Normalize(data_folder, degrees, measurement)
-x, y = meting.isolate(640,660)
-
-xm,ym = meting.mask_peak(656, 0.5)
-ys=meting.smooth_function(10)
-meting.curve_fit()
-yn = meting.normalize()
-
-plt.figure()
-plt.plot(x,y,'-o')
-plt.plot(xm,ym,'o')
-plt.xlabel('golflengte (nm)')
-plt.ylabel('relatieve intensiteit')
-plt.savefig('mask.png', dpi=300)
-# plt.plot(xm,ys,'o')
-
-plt.figure()
-plt.plot(x,yn, 'o')
-plt.xlabel('golflengte (nm)')
-plt.ylabel('relatieve intensiteit')
-plt.savefig('norm.png', dpi=300)
+        return self.x, y_norm
