@@ -36,10 +36,10 @@ def neondata():
     avg = np.mean(reduced_neon_set, axis=0)
     err = np.std(reduced_neon_set, axis=0) / np.sqrt(10)
 
-    return avg, err, neon_set
+    return avg, err
     
 # crop to effective data, plot
-data, err, _ = neondata()
+data, err = neondata()
 
 # make data x and y instead of just y
 x = np.array([i for i in range(len(data))])[735:1050]
