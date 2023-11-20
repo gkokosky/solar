@@ -36,10 +36,10 @@ def neondata():
     avg = np.mean(reduced_neon_set, axis=0)
     err = np.std(reduced_neon_set, axis=0) / np.sqrt(10)
 
-    return avg, err
+    return avg, err, neon_set
     
 # crop to effective data, plot
-data, err = neondata()
+data, err, _ = neondata()
 
 # make data x and y instead of just y
 x = np.array([i for i in range(len(data))])[735:1050]
@@ -66,8 +66,8 @@ plt.figure()
 plt.plot(pixel_peaks, neon_lines, 'o')
 plt.plot(pixel_peaks, result.best_fit)
 plt.xlabel('pixels')
-plt.ylabel('wavelength (nm)')
-plt.savefig('pixel_to_wavelength.png')
+plt.ylabel('golflengte (nm)')
+plt.savefig('pixel_to_wavelength.png', dpi=300)
 
 # plt.figure()
 # plt.plot(pixel_peaks,result.residual,'o')

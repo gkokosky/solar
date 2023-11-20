@@ -76,7 +76,7 @@ class Normalize:
         peak = peaks[peak]
         width, _, _, _ = peak_widths(-y, np.array([peak]))
         
-        width = 0.5*width
+        width = 0.3*width
         
         # find leftmost part of peak
         x_left = x[peak] - width
@@ -143,19 +143,24 @@ degrees = str('30')
 measurement=str('002')
 
 meting = Normalize(data_folder, degrees, measurement)
-x, y = meting.isolate(430,445)
+x, y = meting.isolate(525,534)
 
-xm,ym = meting.mask_peak(438)
+xm,ym = meting.mask_peak(529)
 ys=meting.smooth_function()
 meting.curve_fit()
 yn = meting.normalize()
 
 plt.figure()
-plt.plot(x,y,'o')
+plt.plot(x,y,'-o')
 plt.plot(xm,ym,'o')
-plt.plot(xm,ys,'o')
+plt.xlabel('golflengte (nm)')
+plt.ylabel('relatieve intensiteit')
+plt.savefig('mask.png', dpi=300)
+# plt.plot(xm,ys,'o')
 
 plt.figure()
-plt.plot(x,yn)
-
+plt.plot(x,yn, 'o')
+plt.xlabel('golflengte (nm)')
+plt.ylabel('relatieve intensiteit')
+plt.savefig('norm.png', dpi=300)
 
