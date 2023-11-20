@@ -38,7 +38,7 @@ degrees = str('30')
 measurement=str('002')
 
 meting = Normalize(data_folder, degrees, measurement)
-x, y = meting.isolate(430,445)
+x, y = meting.isolate(400,420)
 
 xm,ym = meting.mask_peak(438)
 ys=meting.smooth_function()

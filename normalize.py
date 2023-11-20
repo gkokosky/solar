@@ -61,7 +61,7 @@ class Normalize:
         
         return self.x, self.y
         
-    def mask_peak(self, wavelength):
+    def mask_peak(self, wavelength, width_multiplier):
         """Finds the absorption peak, and masks it for proper
         normalization.
         """
@@ -76,7 +76,7 @@ class Normalize:
         peak = peaks[peak]
         width, _, _, _ = peak_widths(-y, np.array([peak]))
         
-        width = 0.3*width
+        width = width_multiplier*width
         
         # find leftmost part of peak
         x_left = x[peak] - width
@@ -99,10 +99,10 @@ class Normalize:
         return self.x_masked, self.y_masked
         
 
-    def smooth_function(self):
+    def smooth_function(self, smoothing):
         
         y = self.y_masked
-        self.smooth_y = gaussian_filter1d(y,sigma=3)
+        self.smooth_y = gaussian_filter1d(y,sigma=smoothing)
         return self.smooth_y        
 
     def curve_fit(self):
@@ -143,10 +143,10 @@ degrees = str('30')
 measurement=str('002')
 
 meting = Normalize(data_folder, degrees, measurement)
-x, y = meting.isolate(525,534)
+x, y = meting.isolate(520,545)
 
-xm,ym = meting.mask_peak(529)
-ys=meting.smooth_function()
+xm,ym = meting.mask_peak(531, 1.0)
+ys=meting.smooth_function(10)
 meting.curve_fit()
 yn = meting.normalize()
 
