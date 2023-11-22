@@ -67,7 +67,6 @@ plt.plot(pixel_peaks, neon_lines, 'o')
 plt.plot(pixel_peaks, result.best_fit)
 plt.xlabel('pixels')
 plt.ylabel('golflengte (nm)')
-plt.savefig('pixel_to_wavelength.png', dpi=300)
 
 # plt.figure()
 # plt.plot(pixel_peaks,result.residual,'o')

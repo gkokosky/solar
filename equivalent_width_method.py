@@ -20,7 +20,7 @@ from astropy import units as u
 from astropy.visualization import quantity_support
 quantity_support()
 # comes in handy when determinign the eq. width
-from lmfit.models import Model
+from lmfit.models import GaussianModel
 from scipy.signal import find_peaks
 from pathlib import Path
         
@@ -30,11 +30,17 @@ degrees = str('30')
 measurement=str('002')
 
 meting = Normalize(data_folder, degrees, measurement)
-meting.isolate(640,670)
+meting.isolate(0,800)
 meting.mask_peak(656, 0.5)
 meting.smooth_function(10)
 meting.curve_fit()
 x, y = meting.normalize()
+
+plt.figure()
+plt.plot(x,y,'o')
+plt.xlabel('golflengte (nm)')
+plt.ylabel('relatieve intensiteit')
+plt.savefig('normalized.png', dpi=300)
 
 
 # isolate further for peak only
@@ -59,11 +65,41 @@ def isolate(x, y, min,max):
     
     return x, y
 
-
-x,y = isolate(x,y, 654,660)
+x,y = isolate(x,y, 0,800)
 plt.figure()
-plt.plot([640,680])
+plt.plot([640,680], [1,1])
+plt.xlim(654,660)
 plt.plot(x,y,'o')
+plt.xlabel('golflengte (nm)')
+plt.ylabel('relatieve intensiteit')
+plt.savefig('isolated_peak.png', dpi=300)
+
+# drop points above 1 
+def drop(x,y):
+    
+    y_diff = 1 - y
+    
+    bool = np.where(y_diff>0)
+    y_crop = y[bool]
+    x_crop = x[bool]
+    return x_crop, y_crop
+    
+x, y = drop(x,y)
+plt.figure() 
+plt.plot(x,y,'o')   
+
+def Riemann(x,y):
+    pass
+
+def polyfit(x,y):
+    
+    y = -y + 1
+    
+    model = GaussianModel()
+    pars = model.guess(-y, x=x)
+    result = model.fit(-y, pars, x=x)
+    
+    return result
 
 # RECHTHOEK MAKEN
 # er wordt gebruik gemaakt van matplotlib tranforms
