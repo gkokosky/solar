@@ -16,6 +16,7 @@ from lmfit.models import GaussianModel
 from scipy.signal import find_peaks
 from scipy.integrate import trapezoid
 from pathlib import Path
+import pandas as pd
         
     
 # data_folder = Path('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
@@ -96,10 +97,13 @@ degrees = str('30')
 measurement = str('006')
 
 area = []
+mean_list = []
+error_list = []
+
 for i in range(1,9):
     
     measurement = str(f'00{i}')
-    meting = Area(Path('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles'), degrees, measurement, 640, 670, 656, 0.5, 10)
+    meting = Area(Path(r'C:\Users\Femke\Desktop\NS_jaar_3\Periode_2\NSP2\data_mapje\LISA data\Verschillende hoogtes\Sky_angles\Sky_angles'), degrees, measurement, 640, 670, 656, 0.5, 10)
     meting.isolate(655,660)
     meting.drop()
     area.append(meting.trap())
@@ -108,3 +112,15 @@ mean = np.mean(np.array(area))
 print(mean)
 err = np.std(np.array(area)) / np.sqrt(8)
 print(err)
+
+data = {
+  "degrees":[] ,
+  "mean area": mean,
+  "error": err,
+
+}
+
+#load data into a DataFrame object:
+df = pd.DataFrame(data)
+
+print(df) 

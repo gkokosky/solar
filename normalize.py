@@ -142,7 +142,7 @@ class Normalize:
         y_norm = y / y_fit
         return self.x, y_norm
 
-data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
+data_folder = str(r'C:\Users\Femke\Desktop\NS_jaar_3\Periode_2\NSP2\data_mapje\LISA data\Verschillende hoogtes\Sky_angles\Sky_angles')
 degrees = str('30')
 measurement=str('002')
 meting = Normalize(data_folder, degrees, measurement)
