@@ -1,0 +1,15 @@
+from equivalent_width_method import Area
+from pathlib import Path
+
+area = []
+
+    
+    
+measurement = str('001')
+meting = Area(Path('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles'), str('30'), measurement,655.5, 640, 670, 0.5,10)
+meting.isolate(654,660)
+meting.drop()
+m = meting.trap
+area.append(m)
+    
+print(area)
