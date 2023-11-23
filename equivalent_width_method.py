@@ -30,7 +30,7 @@ degrees = str('30')
 measurement=str('002')
 
 meting = Normalize(data_folder, degrees, measurement)
-meting.isolate(0,800)
+meting.isolate(640,670)
 meting.mask_peak(656, 0.5)
 meting.smooth_function(10)
 meting.curve_fit()
@@ -83,11 +83,6 @@ def drop(x,y):
     y_crop = y[bool]
     x_crop = x[bool]
     return x_crop, y_crop
-    
-x, y = drop(x,y)
-plt.figure() 
-plt.plot(x,y,'o')   
-
 def Riemann(x,y):
     pass
 
