@@ -7,7 +7,6 @@ Created on Sun Nov 19 14:06:46 2023
 from normalize import Normalize
 # equivalent width method script
 import numpy as np
-from scipy.interpolate import make_interp_spline, BSpline
 import matplotlib.pyplot as plt
 from astropy.io import fits
 # MatPlotLib tools for drawing on plots.
@@ -15,19 +14,18 @@ import matplotlib.transforms as mtransforms
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 # AstroPy allows Python to perform common astronomial tasks.
-from astropy.io import fits
-from astropy import units as u
 from astropy.visualization import quantity_support
 quantity_support()
 # comes in handy when determinign the eq. width
 from lmfit.models import GaussianModel
 from scipy.signal import find_peaks
+from scipy.integrate import trapezoid
 from pathlib import Path
         
     
 data_folder = str('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
 degrees = str('30')
-measurement=str('002')
+measurement=str('010')
 
 meting = Normalize(data_folder, degrees, measurement)
 meting.isolate(640,670)
@@ -83,8 +81,20 @@ def drop(x,y):
     y_crop = y[bool]
     x_crop = x[bool]
     return x_crop, y_crop
-def Riemann(x,y):
-    pass
+
+def trap(x,y):
+    
+    # transforms function for proper integral
+    y = -1*y + 1
+    
+    area = trapezoid(x=x, y=y)
+    return area
+
+x, y = drop(x,y)
+area = trap(x, y)
+
+print(area)
+    
 
 def polyfit(x,y):
     
