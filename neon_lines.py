@@ -18,12 +18,12 @@ def neondata():
     neon_set = []
     for i in range(1,10):
         
-        p = Path(__file__).with_name(f'neon-00{i}.fit')
+        p = Path(r'Sky_angles/calibration', f'neon-00{i}.fit')
         name = p.absolute()
         data = fits.getdata(name)
         neon_set.append(data)
         
-    p_final = Path(__file__).with_name('neon-010.fit')
+    p_final = Path(r'Sky_angles/calibration', 'neon-010.fit')
     name_final = p_final.absolute()
     neon_set.append(fits.getdata(name_final))
     

@@ -9,7 +9,7 @@ from lmfit import Model
 
 class Normalize:
     
-    def __init__(self,data_folder,degrees,measurement):
+    def __init__(self,degrees,measurement):
         """ Initializes data from 1 measurement. Reduces to 1D-data and
         converts pixels to wavelength in nm
         
@@ -24,7 +24,7 @@ class Normalize:
         self.y_masked = np.array([])
         self.smooth_y = np.array([])
         
-        file = pathlib.Path(str(data_folder), str(f'{degrees}deg-{measurement}.fit'))
+        file = pathlib.Path('Sky_angles/Sky_angles', f'{degrees}deg-{measurement}.fit')
         self.data = fits.getdata(file)
         
         self.a = 0
@@ -142,10 +142,9 @@ class Normalize:
         y_norm = y / y_fit
         return self.x, y_norm
 
-data_folder = str(r'C:\Users\Femke\Desktop\NS_jaar_3\Periode_2\NSP2\data_mapje\LISA data\Verschillende hoogtes\Sky_angles\Sky_angles')
 degrees = str('30')
 measurement=str('002')
-meting = Normalize(data_folder, degrees, measurement)
+meting = Normalize(degrees, measurement)
 x,y = meting.isolate(500,550)
 plt.figure()
 plt.plot(x,y)

@@ -38,9 +38,9 @@ import pandas as pd
 
 class Area:
     
-    def __init__(self, data_folder,degrees,measurement, min,max,wavelength, width, smoothing):
+    def __init__(self, degrees,measurement, min,max,wavelength, width, smoothing):
         
-        meting = Normalize(data_folder, degrees, measurement)
+        meting = Normalize(degrees, measurement)
         meting.isolate(min,max)
         meting.mask_peak(wavelength, width)
         meting.smooth_function(smoothing)
@@ -94,7 +94,6 @@ class Area:
         return area
     
 
-data_folder = Path('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
 # initiate different angle:
     
 angles = ['06', '10', '15', '30', '40', '50', '60', '70', '80', '90']
@@ -107,18 +106,18 @@ for i in angles:
     for i in range(1,10):
         
         measurement = str(f'00{i}')
-        meting = Area(data_folder, degrees, measurement, 640, 670, 656, 0.5,10)
+        meting = Area(degrees, measurement, 640, 670, 656, 0.5,10)
         meting.isolate(655,660)
         meting.drop()
         area.append(meting.trap())
         
     measurement = str('010')
-    meting = Area(data_folder, degrees, measurement, 640, 670, 656, 0.5,10)
+    meting = Area(degrees, measurement, 640, 670, 656, 0.5,10)
     meting.isolate(655,660)
     meting.drop()
     area.append(meting.trap())
        
-    mean = np.mean(np.aray(area))
+    mean = np.mean(np.array(area))
     err = np.std(np.array(area)) / np.sqrt(10)
     
     
