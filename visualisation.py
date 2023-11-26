@@ -50,7 +50,6 @@ plt.plot(x,y,color='black')
 plt.title('c')
 plt.xlabel('golflengte (nm)')
 plt.ylabel('intensiteit')
+plt.tight_layout()
 
 plt.savefig('neon_en_norm.png', dpi=300)
-
-plt.tight_layout()
