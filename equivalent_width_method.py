@@ -13,7 +13,7 @@ from astropy.visualization import quantity_support
 quantity_support()
 # comes in handy when determinign the eq. width
 from lmfit.models import GaussianModel
-from scipy.signal import find_peaks
+from scipy.signal import find_peaks, peak_widths
 from scipy.integrate import trapezoid
 from pathlib import Path
 import pandas as pd
@@ -49,6 +49,8 @@ class Area:
         self.max = max
         self.x, self.y = meting.normalize()
         
+        self.wavelength = wavelength
+        
 
     # isolate further for peak only
     def isolate(self, min,max):
@@ -72,15 +74,43 @@ class Area:
         
         return self.x, self.y
 
-    # drop points above 1 
-    def drop(self):
+    def peak(self):
         
-        y_diff = 1 - self.y
+        x = self.x
+        y = self.y
+        wavelength = self.wavelength
         
-        bool = np.where(y_diff>0)
-        self.y = self.y[bool]
-        self.x = self.x[bool]
+        peaks, _ = find_peaks(-y)
+        peak_diff = np.abs(x[peaks] - wavelength)
+        peak = np.argmin(peak_diff)
+        peak = peaks[peak]
+        width, _, _, _ = peak_widths(-y, np.array([peak]))
+        
+        width = 0.5 * width
+        # find leftmost part of peak
+        x_left = x[peak] - width
+        left_diff = np.abs(x - x_left)
+        left_idx = np.argmin(left_diff)
+        
+        # find rightmost part of peak
+        x_right = x[peak] + width
+        right_diff = np.abs(x - x_right)
+        right_idx = np.argmin(right_diff)
+        
+        self.x = x[left_idx: right_idx+1]
+        self.y = y[left_idx: right_idx+1]
+        
         return self.x, self.y
+
+    # drop points above 1 
+    # def drop(self):
+        
+    #     y_diff = 1 - self.y
+        
+    #     bool = np.where(y_diff>0)
+    #     self.y = self.y[bool]
+    #     self.x = self.x[bool]
+    #     return self.x, self.y
     
     def trap(self):
         

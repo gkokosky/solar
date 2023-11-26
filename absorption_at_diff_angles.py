@@ -19,8 +19,8 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
             print('huh')
 
         measure = Area(degrees, measurement, min, max, wavelength, width, smoothing)
-        measure.isolate(small_min, small_max)
-        x,y = measure.drop()
+        # measure.isolate(small_min, small_max)
+        x,y = measure.peak()
         area = measure.trap()
         area_list.append(area)
         
@@ -44,9 +44,14 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     
     angles = np.array(angles)
     angles = angles.astype(int)
-    print(angles)
     avg = np.array(avg_list)
     err = np.array(err_list)
     
     plt.figure()
-    plt.errorbar(angles, avg, yerr=err, fmt='o')
+    plt.errorbar(angles, avg, yerr=err, fmt='o', color='black')
+    plt.xticks([i for i in range(0,100,10)])
+    plt.xlabel(r'hoek ($^{\circ}$)')
+    plt.ylabel('oppervlakte spectrallijn')
+    plt.savefig('rareoppervlakte.png', dpi=300)
+    
+angles(650, 670, 656, 0.5, 10, 0,0)

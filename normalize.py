@@ -124,8 +124,7 @@ class Normalize:
         self.b = result.params['b'].value
         self.c = result.params['c'].value
         
-        return self.a,self.b,self.c
-    
+        return self.a,self.b,self.c 
     def normalize(self):
         
         x = self.x
@@ -141,10 +140,3 @@ class Normalize:
         
         y_norm = y / y_fit
         return self.x, y_norm
-
-degrees = str('30')
-measurement=str('002')
-meting = Normalize(degrees, measurement)
-x,y = meting.isolate(500,550)
-plt.figure()
-plt.plot(x,y)
