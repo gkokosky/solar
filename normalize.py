@@ -24,6 +24,16 @@ class Normalize:
         self.y_masked = np.array([])
         self.smooth_y = np.array([])
         
+        for i in range(1,11):
+            degrees = f'{degrees}'
+            measurement = f'{i}'
+            if len(measurement) == 1:
+                measurement = f'00{i}'
+            elif len(measurement) == 2:
+                measurement = f'0{i}'
+            else:
+                print('huh')
+        
         file = pathlib.Path('Sky_angles/Sky_angles', f'{degrees}deg-{measurement}.fit')
         self.data = fits.getdata(file)
         
@@ -140,3 +150,8 @@ class Normalize:
         
         y_norm = y / y_fit
         return self.x, y_norm
+    
+meting = Normalize('06', 2)
+x,y = meting.isolate(0,770)
+plt.figure()
+plt.plot(x,y)

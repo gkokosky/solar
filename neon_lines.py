@@ -40,10 +40,10 @@ def neondata():
     
 # crop to effective data, plot
 data, err = neondata()
-
 # make data x and y instead of just y
 x = np.array([i for i in range(len(data))])[735:1050]
 y = np.array(data)[735:1050]
+y_err = np.array(err)[735:1050]
 
 
 peaks, _ = find_peaks(y, height=500000)
@@ -59,6 +59,7 @@ def function(x,a,b,c):
      return a*x**2 + b*x + c
 
 pixel_peaks = x[peaks]
+x_err = y_err[peaks]
 model = Model(function)
 result = model.fit(neon_lines, x=pixel_peaks, a=1,b=1,c=1)
 

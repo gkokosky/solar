@@ -14,7 +14,7 @@ quantity_support()
 # comes in handy when determinign the eq. width
 from lmfit.models import GaussianModel
 from scipy.signal import find_peaks, peak_widths
-from scipy.integrate import trapezoid
+from scipy.integrate import simpson
 from pathlib import Path
 import pandas as pd
         
@@ -116,7 +116,7 @@ class Area:
         
         # transforms function for proper integral
         x = self.x
-        y = -1*self.y + 1
+        y = -self.y + 1
         
-        area = trapezoid(y=y)
+        area = np.trapz(y=y, x=x)
         return area

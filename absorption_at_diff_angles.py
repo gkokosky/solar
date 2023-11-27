@@ -24,8 +24,9 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
         area = measure.trap()
         area_list.append(area)
         
+    area_list = np.array(area_list)
+    print(area_list)
     avg = np.mean(area_list)
-    print(avg)
     err = np.std(area_list) / np.sqrt(10)
     
     return np.array(area_list), avg, err
@@ -55,4 +56,4 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     plt.ylabel('oppervlakte spectrallijn')
     plt.savefig('rareoppervlakte.png', dpi=300)
     
-angles(650, 670, 656, 0.5, 10, 0,0)
+angles(682, 695, 687.5, 0.5, 10, 0,0)
