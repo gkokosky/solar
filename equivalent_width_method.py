@@ -115,7 +115,8 @@ class Area:
     def trap(self):
         
         # transforms function for proper integral
-        self.y = -1*self.y + 1
+        x = self.x
+        y = -1*self.y + 1
         
-        area = trapezoid(x=self.x, y=self.y)
+        area = trapezoid(y=y)
         return area

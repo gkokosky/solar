@@ -25,6 +25,7 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
         area_list.append(area)
         
     avg = np.mean(area_list)
+    print(avg)
     err = np.std(area_list) / np.sqrt(10)
     
     return np.array(area_list), avg, err
