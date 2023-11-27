@@ -147,6 +147,7 @@ class Normalize:
         # plt.plot(x,y_fit)
         # plt.xlabel('golflengte (nm)')
         # plt.ylabel('relatieve intensiteit')
+        # plt.show()
         
         y_norm = y / y_fit
         return self.x, y_norm
@@ -154,4 +155,6 @@ class Normalize:
 meting = Normalize('06', 2)
 x,y = meting.isolate(0,770)
 plt.figure()
+plt.title('Spectrum')
 plt.plot(x,y)
+plt.show()

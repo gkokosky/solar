@@ -3,7 +3,6 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 # returns area from 10 measurements at 1 angle
 def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, small_max):
     
@@ -53,7 +52,8 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     plt.errorbar(angles, avg, yerr=err, fmt='o', color='black')
     plt.xticks([i for i in range(0,100,10)])
     plt.xlabel(r'hoek ($^{\circ}$)')
-    plt.ylabel('oppervlakte spectrallijn')
+    plt.ylabel('oppervlakte spectraallijn')
     plt.savefig('rareoppervlakte.png', dpi=300)
+    plt.show()
     
 angles(682, 695, 687.5, 0.5, 10, 0,0)

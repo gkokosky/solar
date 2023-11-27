@@ -48,9 +48,10 @@ y_err = np.array(err)[735:1050]
 
 peaks, _ = find_peaks(y, height=500000)
 plt.figure()
+plt.title('pieken neon kalibratie spectrum')
 plt.plot(x,y)
 plt.plot(x[peaks],y[peaks],'o')
-
+plt.show()
 neon_lines = [5852.49, 5891.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99,6402.25,6506.53, 6532.88,6598.95]
 
 
@@ -64,10 +65,12 @@ model = Model(function)
 result = model.fit(neon_lines, x=pixel_peaks, a=1,b=1,c=1)
 
 plt.figure()
+plt.title('golflengte vs pixels')
 plt.plot(pixel_peaks, neon_lines, 'o')
 plt.plot(pixel_peaks, result.best_fit)
 plt.xlabel('pixels')
 plt.ylabel('golflengte (nm)')
+plt.show()
 
 # plt.figure()
 # plt.plot(pixel_peaks,result.residual,'o')
