@@ -19,6 +19,7 @@ class Normalize:
             data_folder (str): folder in which the 'fits' files are stored
         """
         self.x = np.array([])
+        self.measurement = measurement 
         self.y = np.array([])
         self.x_masked = np.array([])
         self.y_masked = np.array([])
@@ -29,6 +30,7 @@ class Normalize:
             measurement = f'{i}'
             if len(measurement) == 1:
                 measurement = f'00{i}'
+                self.measurement = f'00{i}'
             elif len(measurement) == 2:
                 measurement = f'0{i}'
             else:
@@ -43,9 +45,26 @@ class Normalize:
         
         reduced_data = []
         reduced_data = np.sum(self.data, axis=0)
+        
+        # get dark measurement and reduce
+        dark_file = pathlib.Path('Sky_angles/dark', 'dark-007_half_s.fit')
+        dark_file = '/home/gideon/Documents/NSP2/solar/Sky_angles/dark/dark-007_half_s_.fit'
+        self.dark = fits.getdata(dark_file)
+        reduced_dark = []
+        reduced_dark = np.sum(self.dark, axis=0)
+        
+        plt.figure()
+        plt.plot(reduced_dark)
             
         y_pixel = np.array(reduced_data)
         x_pixel = np.array([i for i in range(len(y_pixel))])
+        
+        plt.figure()
+        plt.plot(x_pixel,y_pixel)
+        
+        y_corr = y_pixel - np.array(reduced_dark)
+        plt.figure()
+        plt.plot(x_pixel, y_corr)
 
         self.x = a * x_pixel**2 + b * x_pixel + c
         self.x = self.x * 0.1
@@ -150,11 +169,14 @@ class Normalize:
         # plt.show()
         
         y_norm = y / y_fit
+        
+        if self.measurement == '001':
+            plt.figure()
+            plt.plot(x,y_norm)
+            
+        # plt.figure()
+        # plt.plot(x,y_norm)
+        
         return self.x, y_norm
     
-meting = Normalize('06', 2)
-x,y = meting.isolate(0,770)
-plt.figure()
-plt.title('Spectrum')
-plt.plot(x,y)
-plt.show()
+meting = Normalize(10, 1)

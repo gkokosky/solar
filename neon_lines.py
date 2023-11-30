@@ -47,13 +47,14 @@ y_err = np.array(err)[735:1050]
 
 
 peaks, _ = find_peaks(y, height=500000)
+peaks = np.delete(peaks, 0)
 plt.figure()
 plt.title('pieken neon kalibratie spectrum')
 plt.plot(x,y)
 plt.plot(x[peaks],y[peaks],'o')
 plt.show()
 neon_lines = [5852.49, 5891.89, 5944.83, 5975.53, 6030.00, 6074.34, 6096.16, 6143.06, 6163.59, 6217.28, 6266.49, 6304.79, 6334.43, 6382.99,6402.25,6506.53, 6532.88,6598.95]
-
+neon_lines = np.delete(np.array(neon_lines), 0)
 
 def function(x,a,b,c):
     
@@ -72,8 +73,8 @@ plt.xlabel('pixels')
 plt.ylabel('golflengte (nm)')
 plt.show()
 
-# plt.figure()
-# plt.plot(pixel_peaks,result.residual,'o')
+plt.figure()
+plt.plot(pixel_peaks,result.residual,'o')
 
 a = result.params['a'].value
 b = result.params['b'].value

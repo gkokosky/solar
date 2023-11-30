@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib import gridspec
 
 data = fits.getdata('Sky_angles/Sky_angles/06deg-001.fit')
+hdr = fits.getheader('Sky_angles/Sky_angles/06deg-001.fit')
+print(repr(hdr))
 
 prof = np.sum(data, axis=0)[0:1201]
 
@@ -25,8 +27,8 @@ from neon_lines import pixel_peaks, neon_lines, result
 from normalize import Normalize
 
 meting = Normalize('06', '010')
-x_0, y_0 = meting.isolate(645,670)
-meting.mask_peak(656,0.5)
+x_0, y_0 = meting.isolate(640,655)
+meting.mask_peak(647,0.5)
 meting.smooth_function(10)
 meting.curve_fit()
 x,y = meting.normalize()

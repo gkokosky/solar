@@ -38,28 +38,68 @@ import pandas as pd
 
 class Area:
     
-    def __init__(self, degrees,measurement, min,max,wavelength, width, smoothing):
+    def __init__(self, degrees,measurement, min,max,wavelength, width, smoothing, small_min, small_max):
         
         meting = Normalize(degrees, measurement)
         meting.isolate(min,max)
         meting.mask_peak(wavelength, width)
         meting.smooth_function(smoothing)
         meting.curve_fit()
-        self.min = min
-        self.max = max
+        
+        self.measurement = measurement
+        
+        for i in range(1,11):
+            degrees = f'{degrees}'
+            measurement = f'{i}'
+            if len(measurement) == 1:
+                measurement = f'00{i}'
+                self.measurement = f'00{i}'
+            elif len(measurement) == 2:
+                measurement = f'0{i}'
+            else:
+                print('huh')
+        self.width = width
+        self.min = small_min
+        self.max = small_max
         self.x, self.y = meting.normalize()
         
         self.wavelength = wavelength
-        
 
-    # isolate further for peak only
-    def isolate(self, min,max):
-        """Isolates specific wavelength range, so that only one absorption peak is found. 
+    # def peak(self):
         
-        Args:
-            min (float): lowest wavelength in range to analyze
-            max (float): highest wavelength in range to analyze
-        """
+    #     x = self.x
+    #     y = self.y
+    #     wavelength = self.wavelength
+        
+    #     peaks, _ = find_peaks(-y)
+    #     peak_diff = np.abs(x[peaks] - wavelength)
+    #     peak = np.argmin(peak_diff)
+    #     peak = peaks[peak]
+    #     width, _, _, _ = peak_widths(-y, np.array([peak]))
+        
+    #     width = self.width * width
+    #     # find leftmost part of peak
+    #     x_left = x[peak] - width
+    #     left_diff = np.abs(x - x_left)
+    #     left_idx = np.argmin(left_diff)
+        
+    #     # find rightmost part of peak
+    #     x_right = x[peak] + width
+    #     right_diff = np.abs(x - x_right)
+    #     right_idx = np.argmin(right_diff)
+        
+    #     self.x = x[left_idx: right_idx+1]
+    #     self.y = y[left_idx: right_idx+1]
+        
+    #     return self.x, self.y
+    
+    #isolates peak through manual wavelength input 
+    def peak(self):
+        
+        x = self.x
+        y = self.y
+        min = self.min
+        max = self.max
         
         # finds smallest difference between x and min/max
         min_diff = np.abs(self.x - min)
@@ -71,34 +111,6 @@ class Area:
         
         self.x = self.x[min_idx:max_idx+1]
         self.y = self.y[min_idx:max_idx+1]
-        
-        return self.x, self.y
-
-    def peak(self):
-        
-        x = self.x
-        y = self.y
-        wavelength = self.wavelength
-        
-        peaks, _ = find_peaks(-y)
-        peak_diff = np.abs(x[peaks] - wavelength)
-        peak = np.argmin(peak_diff)
-        peak = peaks[peak]
-        width, _, _, _ = peak_widths(-y, np.array([peak]))
-        
-        width = 0.5 * width
-        # find leftmost part of peak
-        x_left = x[peak] - width
-        left_diff = np.abs(x - x_left)
-        left_idx = np.argmin(left_diff)
-        
-        # find rightmost part of peak
-        x_right = x[peak] + width
-        right_diff = np.abs(x - x_right)
-        right_idx = np.argmin(right_diff)
-        
-        self.x = x[left_idx: right_idx+1]
-        self.y = y[left_idx: right_idx+1]
         
         return self.x, self.y
 
@@ -117,6 +129,6 @@ class Area:
         # transforms function for proper integral
         x = self.x
         y = -self.y + 1
-        
+        print(self.measurement)
         area = np.trapz(y=y, x=x)
         return area
