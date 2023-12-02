@@ -59,7 +59,7 @@ class Normalize:
         reduced_dark = []
         reduced_dark = np.sum(self.dark, axis=0)
         
-        y_pixel = np.array(reduced_data)
+        y_pixel = np.array(reduced_data) - reduced_dark
         x_pixel = np.array([i for i in range(len(y_pixel))])
 
         self.x = a * x_pixel**2 + b * x_pixel + c
@@ -98,6 +98,7 @@ class Normalize:
         
         peaks, _ = find_peaks(-y)
         
+        # finds peak associated with given wavelength
         peak_diff = np.abs(x[peaks] - wavelength)
         peak = np.argmin(peak_diff)
         peak = peaks[peak]
