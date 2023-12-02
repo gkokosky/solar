@@ -53,18 +53,8 @@ class Normalize:
         reduced_dark = []
         reduced_dark = np.sum(self.dark, axis=0)
         
-        plt.figure()
-        plt.plot(reduced_dark)
-            
         y_pixel = np.array(reduced_data)
         x_pixel = np.array([i for i in range(len(y_pixel))])
-        
-        plt.figure()
-        plt.plot(x_pixel,y_pixel)
-        
-        y_corr = y_pixel - np.array(reduced_dark)
-        plt.figure()
-        plt.plot(x_pixel, y_corr)
 
         self.x = a * x_pixel**2 + b * x_pixel + c
         self.x = self.x * 0.1

@@ -129,6 +129,5 @@ class Area:
         # transforms function for proper integral
         x = self.x
         y = -self.y + 1
-        print(self.measurement)
         area = np.trapz(y=y, x=x)
         return area
