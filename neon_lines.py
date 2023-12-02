@@ -73,8 +73,8 @@ plt.xlabel('pixels')
 plt.ylabel('golflengte (nm)')
 plt.show()
 
-plt.figure()
-plt.plot(pixel_peaks,result.residual,'o')
+# plt.figure()
+# plt.plot(pixel_peaks,result.residual,'o')
 
 a = result.params['a'].value
 b = result.params['b'].value

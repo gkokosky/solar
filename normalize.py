@@ -26,7 +26,6 @@ class Normalize:
         self.smooth_y = np.array([])
         
         for i in range(1,11):
-            degrees = f'{degrees}'
             measurement = f'{i}'
             if len(measurement) == 1:
                 measurement = f'00{i}'
@@ -35,6 +34,13 @@ class Normalize:
                 measurement = f'0{i}'
             else:
                 print('huh')
+                
+        # converts angle from int to str for same purpose
+        if degrees == 6:
+            degrees = f'0{degrees}'
+        else:
+            degrees = f'{degrees}'
+        
         
         file = pathlib.Path('Sky_angles/Sky_angles', f'{degrees}deg-{measurement}.fit')
         self.data = fits.getdata(file)

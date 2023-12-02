@@ -48,6 +48,7 @@ class Area:
         
         self.measurement = measurement
         
+        # converts measurement from int to string for data reading
         for i in range(1,11):
             degrees = f'{degrees}'
             measurement = f'{i}'
@@ -58,6 +59,14 @@ class Area:
                 measurement = f'0{i}'
             else:
                 print('huh')
+                
+        # converts angle from int to str for same purpose
+        if degrees == 6:
+            degrees = f'0{degrees}'
+        else:
+            degrees = f'{degrees}'
+        
+        
         self.width = width
         self.min = small_min
         self.max = small_max
