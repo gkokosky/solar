@@ -1,5 +1,6 @@
 from normalize import Normalize
 from scipy.signal import find_peaks, peak_widths
+from lmfit import Model
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -41,9 +42,6 @@ class Error:
         
         self.wavelength = wavelength
         
-        plt.figure()
-        plt.plot(self.x, self.y)
-        
     def peaks(self, width):
         """
         Finds prominent peaks and masks them so error will be determined based on noise only.
@@ -70,7 +68,6 @@ class Error:
             right_indices.append(right_idx)
             
         left_idx, right_idx = np.array(left_indices), np.array(right_indices)
-        print(left_idx, right_idx)
         
         for i, j in zip(left_idx, right_idx):
             
@@ -82,9 +79,26 @@ class Error:
             self.x_masked = x[mask]
             self.y_masked = y[mask]
             
-        plt.figure()
-        plt.plot(self.x_masked, self.y_masked,'o')
+    def error(self):
+        """Fits 2nd-degree polynomial through function and determines error based on residuals.
+        """
+        
+        x = self.x_masked
+        y = self.y_masked
+        
+        def function(x, a, b, c):
+            return a * x**2 + b*x + c
+        
+        model = Model(function)
+        pars = model.make_params(a=1,b=1,c=1)
+        
+        result = model.fit(y, pars,x=x)
+        diff = np.abs(result.residual)
+        err = np.mean(diff)
+        
+        return err
             
 meting = Error(6,2,640, 680, 656, 0.5, 10)
 meting.peaks(0.6)
+meting.error()
         
