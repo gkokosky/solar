@@ -11,30 +11,6 @@ import matplotlib.pyplot as plt
 # AstroPy allows Python to perform common astronomial tasks.
 from astropy.visualization import quantity_support
 quantity_support()
-# comes in handy when determinign the eq. width
-from lmfit.models import GaussianModel
-from scipy.signal import find_peaks, peak_widths
-from scipy.integrate import simpson
-from pathlib import Path
-import pandas as pd
-        
-    
-# data_folder = Path('/home/gideon/Documents/NSP2/LISA data/Verschillende hoogtes/Sky_angles/Sky_angles')
-# degrees = str('30')
-# measurement=str('010')
-
-# meting = Normalize(data_folder, degrees, measurement)
-# meting.isolate(640,670)
-# meting.mask_peak(656, 0.5)
-# meting.smooth_function(10)
-# meting.curve_fit()
-# x, y = meting.normalize()
-
-# plt.figure()
-# plt.plot(x,y,'o')
-# plt.xlabel('golflengte (nm)')
-# plt.ylabel('relatieve intensiteit')
-# plt.savefig('normalized.png', dpi=300)
 
 class Area:
     
@@ -45,8 +21,6 @@ class Area:
         meting.mask_peak(wavelength, width)
         meting.smooth_function(smoothing)
         meting.curve_fit()
-        
-        self.measurement = measurement
         
         # converts measurement from int to string for data reading
         for i in range(1,11):
@@ -60,6 +34,8 @@ class Area:
             else:
                 print('huh')
                 
+        self.measurement = measurement
+                
         # converts angle from int to str for same purpose
         if degrees == 6:
             degrees = f'0{degrees}'
@@ -68,47 +44,20 @@ class Area:
         
         
         self.width = width
-        self.min = small_min
-        self.max = small_max
+        self.small_min = small_min
+        self.small_max = small_max
         self.x, self.y = meting.normalize()
         
         self.wavelength = wavelength
-
-    # def peak(self):
-        
-    #     x = self.x
-    #     y = self.y
-    #     wavelength = self.wavelength
-        
-    #     peaks, _ = find_peaks(-y)
-    #     peak_diff = np.abs(x[peaks] - wavelength)
-    #     peak = np.argmin(peak_diff)
-    #     peak = peaks[peak]
-    #     width, _, _, _ = peak_widths(-y, np.array([peak]))
-        
-    #     width = self.width * width
-    #     # find leftmost part of peak
-    #     x_left = x[peak] - width
-    #     left_diff = np.abs(x - x_left)
-    #     left_idx = np.argmin(left_diff)
-        
-    #     # find rightmost part of peak
-    #     x_right = x[peak] + width
-    #     right_diff = np.abs(x - x_right)
-    #     right_idx = np.argmin(right_diff)
-        
-    #     self.x = x[left_idx: right_idx+1]
-    #     self.y = y[left_idx: right_idx+1]
-        
-    #     return self.x, self.y
+        self.wavelength = wavelength
     
     #isolates peak through manual wavelength input 
     def peak(self):
         
         x = self.x
         y = self.y
-        min = self.min
-        max = self.max
+        min = self.small_min
+        max = self.small_max
         
         # finds smallest difference between x and min/max
         min_diff = np.abs(self.x - min)
@@ -139,4 +88,5 @@ class Area:
         x = self.x
         y = -self.y + 1
         area = np.trapz(y=y, x=x)
+
         return area

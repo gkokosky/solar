@@ -1,13 +1,13 @@
 from equivalent_width_method import Area
-from pathlib import Path
+from error import Error
 import matplotlib.pyplot as plt
-import uncertainties
 import numpy as np
 
 # returns area from 10 measurements at 1 angle
 def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, small_max):
     
     area_list = []
+    err_list = []
     for i in range(1,11):
         degrees = f'{degrees}'
         measurement = f'{i}'
@@ -19,31 +19,24 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
             print('huh')
 
         measure = Area(degrees, measurement, min, max, wavelength, width, smoothing, small_min, small_max)
-        # measure.isolate(small_min, small_max)
         x,y = measure.peak()
         area = measure.trap()
         area_list.append(area)
+            
+        err_meting = Error(degrees, measurement, min, max, wavelength, width, smoothing)
+        err_meting.peaks(0.5)
+        point_err = err_meting.error()
         
-        # y_with_err = []
-        # for i in range(len(y)):
-            
-        #     err = 0.02
-        #     y_err = uncertainties.ufloat(y[i], err)
-        #     y_with_err.append(y_err)
-        
-        # #determine area with error
-        # err_arr = np.array(y_with_err)
-        # delta_x = x[1] - x[0]
-        # print(np.sum(err_arr))
-        # err = 0.5 * (err_arr) * delta_x
-            
-            
+        sigma_list = [point_err for i in range(len(x))]
+        sigma_list = (np.array(sigma_list))**2
+        err = np.sqrt(np.sum(sigma_list)) * (x[1] - x[0])
+        err_list.append(err)
         
     area_list = np.array(area_list)
     avg = np.mean(area_list)
-    
+    err = np.mean(err_list)
 
-    return np.array(area_list), avg
+    return np.array(area_list), avg, err
 
 def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     
@@ -53,9 +46,10 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     avg_list = []
     err_list = []
     for i in angles:
-        area, avg = ten_mesurements(i, min, max, wavelength, width, smoothing, small_min, small_max)
+        area, avg, err = ten_mesurements(i, min, max, wavelength, width, smoothing, small_min, small_max)
         area_array.append(area)
         avg_list.append(avg)
+        err_list.append(err)
     
     angles = np.array(angles)
     angles = angles.astype(int)
@@ -63,11 +57,10 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     err = np.array(err_list)
     
     plt.figure()
-    plt.plot(angles, avg, 'o', color='black')
+    plt.errorbar(angles, avg, yerr=err, fmt='o', color='black', capsize=3.5)
     plt.xticks([i for i in range(0,100,10)])
     plt.xlabel(r'hoek ($^{\circ}$)')
     plt.ylabel('oppervlakte spectraallijn')
-    plt.savefig('neon_mooi.png', dpi=300)
     plt.show()
     
-angles(695, 710, 703, 0.5, 10, 702.5, 704)
+angles(640, 665, 656, 0.5, 10, 655.5, 658)

@@ -11,7 +11,7 @@ class Error:
     def __init__(self, degrees, measurement, min, max, wavelength, width, smoothing):
         
         meting = Normalize(degrees, measurement)
-        meting.isolate(min,max)
+        meting.isolate(min - 10,max + 10)
         meting.mask_peak(wavelength, width)
         meting.smooth_function(smoothing)
         meting.curve_fit()

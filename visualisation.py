@@ -1,7 +1,6 @@
 from astropy.io import fits
 import numpy as np 
 import matplotlib.pyplot as plt
-from matplotlib import gridspec
 
 data = fits.getdata('Sky_angles/Sky_angles/06deg-001.fit')
 hdr = fits.getheader('Sky_angles/Sky_angles/06deg-001.fit')

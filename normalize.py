@@ -65,6 +65,11 @@ class Normalize:
         self.x = a * x_pixel**2 + b * x_pixel + c
         self.x = self.x * 0.1
         self.y = np.array(y_pixel)
+        
+        if degrees == '06' and measurement == '001':
+            self.graph_bool = True
+        else:
+            self.graph_bool = False
 
 
     def isolate(self, min,max):
@@ -157,22 +162,13 @@ class Normalize:
         y = self.y
         
         y_fit = np.array(self.a * x **2 + self.b * x + self.c)
-
-        # plt.figure()
-        # plt.plot(x,y,'o')
-        # plt.plot(x,y_fit)
-        # plt.xlabel('golflengte (nm)')
-        # plt.ylabel('relatieve intensiteit')
-        # plt.show()
         
         y_norm = y / y_fit
-        
-        if self.measurement == '001':
-            plt.figure()
-            plt.plot(x,y_norm)
+
+        if self.graph_bool == True:
             
-        # plt.figure()
-        # plt.plot(x,y_norm)
+            plt.figure()
+            plt.plot(x, y_norm)
         
         return self.x, y_norm
     
