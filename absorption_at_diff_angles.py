@@ -40,7 +40,7 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
 
 def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     
-    angles = ['06', '10', '15', '30', '40', '50', '60', '70', '80', '90']
+    angles = np.array(['06', '10', '15', '30', '40', '50', '60', '70', '80', '90'])
     
     area_array = []
     avg_list = []
@@ -50,8 +50,7 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
         area_array.append(area)
         avg_list.append(avg)
         err_list.append(err)
-    
-    angles = np.array(angles)
+
     angles = angles.astype(int)
     avg = np.array(avg_list)
     err = np.array(err_list)
@@ -61,6 +60,7 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     plt.xticks([i for i in range(0,100,10)])
     plt.xlabel(r'hoek ($^{\circ}$)')
     plt.ylabel('oppervlakte spectraallijn')
+    plt.rcParams['figure.dpi'] = 300
     plt.show()
     
-angles(640, 665, 656, 0.5, 10, 655.5, 658)
+angles(695, 712, 703, 0.5, 10, 701, 705)
