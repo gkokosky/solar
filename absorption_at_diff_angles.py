@@ -61,6 +61,7 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     plt.xlabel(r'hoek ($^{\circ}$)')
     plt.ylabel('oppervlakte spectraallijn')
     plt.rcParams['figure.dpi'] = 300
+    plt.savefig(f'{wavelength}_grafiek.png')
     plt.show()
     
 angles(695, 712, 703, 0.5, 10, 701, 705)

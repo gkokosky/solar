@@ -2,7 +2,7 @@ from neon_lines import a, b, c
 from astropy.io import fits
 import numpy as np
 import matplotlib.pyplot as plt
-import pathlib
+from pathlib import Path
 from scipy.signal import find_peaks, peak_widths
 from scipy.ndimage import gaussian_filter1d
 from lmfit import Model
@@ -42,7 +42,7 @@ class Normalize:
             degrees = f'{degrees}'
         
         
-        file = pathlib.Path('Sky_angles/Sky_angles', f'{degrees}deg-{measurement}.fit')
+        file = Path('Sky_angles/Sky_angles', f'{degrees}deg-{measurement}.fit')
         self.data = fits.getdata(file)
         
         self.a = 0
@@ -53,8 +53,8 @@ class Normalize:
         reduced_data = np.sum(self.data, axis=0)
         
         # get dark measurement and reduce
-        dark_file = pathlib.Path('Sky_angles/dark', 'dark-007_half_s.fit')
-        dark_file = '/home/gideon/Documents/NSP2/solar/Sky_angles/dark/dark-007_half_s_.fit'
+        dark_file = Path('Sky_angles/dark', 'dark-007_half_s_.fit')
+        # dark_file = '/home/gideon/Documents/NSP2/solar/Sky_angles/dark/dark-007_half_s_.fit'
         self.dark = fits.getdata(dark_file)
         reduced_dark = []
         reduced_dark = np.sum(self.dark, axis=0)
