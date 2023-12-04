@@ -39,6 +39,7 @@ small_max_corr = 2
 x,y,err,result = graph_and_fit(wavelength, corr, small_min_corr, small_max_corr)
 
 plt.figure()
+plt.title(f'area vs degrees {wavelength}')
 plt.errorbar(x, y, yerr=err, fmt='o')
 plt.plot(x, result.best_fit)
 plt.xlabel(r'hoek ($^{\circ}$)')
@@ -58,6 +59,7 @@ x,y,err,result = graph_and_fit(wavelength, corr, small_min_corr, small_max_corr)
 
 plt.errorbar(x, y, yerr=err, fmt='o')
 plt.plot(x, result.best_fit)
+plt.title(f'Schuine fit {wavelength}')
 plt.rcParams['figure.dpi'] = 300
 plt.xlim(0,90)
 plt.ylim(0,0.5)
@@ -75,6 +77,7 @@ x,y,err,result = graph_and_fit(wavelength, corr, small_min_corr, small_max_corr)
 
 plt.errorbar(x, y, yerr=err, fmt='o')
 plt.plot(x, result.best_fit)
+plt.title(f'rechte fit {wavelength}')
 plt.rcParams['figure.dpi'] = 300
 plt.xlim(0,90)
 plt.ylim(0,0.5)
