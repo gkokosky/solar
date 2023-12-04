@@ -20,6 +20,10 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
 
         measure = Area(degrees, measurement, min, max, wavelength, width, smoothing, small_min, small_max)
         x,y = measure.peak()
+        
+        if i == 2:
+            x_1, y_1 = x,y
+        
         area = measure.trap()
         area_list.append(area)
             
@@ -27,8 +31,11 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
         err_meting.peaks(0.5)
         point_err = err_meting.error()
         
-        sigma_list = [point_err for i in range(len(x))]
+        # error on point scales with the square root of the flux
+        sigma_list = [point_err * np.sqrt(y[i]) for i in range(len(x))]
         sigma_list = (np.array(sigma_list))**2
+        
+        # error on area follows from error propagation, multiplied with distance between datapoints
         err = np.sqrt(np.sum(sigma_list)) * (x[1] - x[0])
         err_list.append(err)
         
@@ -36,7 +43,7 @@ def ten_mesurements(degrees, min, max, wavelength, width, smoothing, small_min, 
     avg = np.mean(area_list)
     err = np.mean(err_list)
 
-    return np.array(area_list), avg, err
+    return np.array(area_list), avg, err, x_1, y_1
 
 def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     
@@ -46,7 +53,12 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     avg_list = []
     err_list = []
     for i in angles:
-        area, avg, err = ten_mesurements(i, min, max, wavelength, width, smoothing, small_min, small_max)
+        area, avg, err, x, y = ten_mesurements(i, min, max, wavelength, width, smoothing, small_min, small_max)
+        
+        if i == '06':
+            plt.figure()
+            plt.plot(x,y)
+        
         area_array.append(area)
         avg_list.append(avg)
         err_list.append(err)
@@ -55,13 +67,4 @@ def angles(min, max, wavelength, width, smoothing, small_min, small_max):
     avg = np.array(avg_list)
     err = np.array(err_list)
     
-    plt.figure()
-    plt.errorbar(angles, avg, yerr=err, fmt='o', color='black', capsize=3.5)
-    plt.xticks([i for i in range(0,100,10)])
-    plt.xlabel(r'hoek ($^{\circ}$)')
-    plt.ylabel('oppervlakte spectraallijn')
-    plt.rcParams['figure.dpi'] = 300
-    plt.savefig(f'{wavelength}_grafiek.png')
-    plt.show()
-    
-angles(695, 712, 703, 0.5, 10, 701, 705)
+    return angles, avg, err

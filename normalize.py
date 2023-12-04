@@ -164,11 +164,14 @@ class Normalize:
         
         y_norm = y / y_fit
 
-        if self.graph_bool == True:
+        # if self.graph_bool == True:
             
-            plt.figure()
-            plt.plot(x, y_norm)
+        #     plt.figure()
+        #     plt.plot(x, y_norm)
         
         return self.x, y_norm
     
 meting = Normalize(10, 1)
+x,y = meting.isolate(525, 545)
+plt.figure()
+plt.plot(x,y)
