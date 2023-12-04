@@ -54,7 +54,6 @@ class Normalize:
         
         # get dark measurement and reduce
         dark_file = Path('Sky_angles/dark', 'dark-007_half_s_.fit')
-        # dark_file = '/home/gideon/Documents/NSP2/solar/Sky_angles/dark/dark-007_half_s_.fit'
         self.dark = fits.getdata(dark_file)
         reduced_dark = []
         reduced_dark = np.sum(self.dark, axis=0)
