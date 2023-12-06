@@ -40,8 +40,8 @@ def graph_and_fit(wavelength, corr, small_min_corr, small_max_corr):
 
 wavelength = 628
 corr = 10
-small_min_corr = 1.5
-small_max_corr = 1.5
+small_min_corr = 2
+small_max_corr = 2
 
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
@@ -63,8 +63,8 @@ plt.rcParams["figure.dpi"] = 300
 
 wavelength = 656
 corr = 10
-small_min_corr = 1
-small_max_corr = 2
+small_min_corr = 0.8
+small_max_corr = 1.5
 
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
@@ -80,8 +80,8 @@ ax1.errorbar(30, 0.1939, yerr=0.0124, fmt="o", color="gray", capsize=3)
 
 wavelength = 493
 corr = 10
-small_min_corr = 2
-small_max_corr = 2
+small_min_corr = 2.5
+small_max_corr = 2.5
 
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
@@ -91,7 +91,7 @@ ax1.errorbar(
     x, y, yerr=err, fmt="o", color="orange", capsize=3, label="493 (Fe-I)"
 )
 ax1.plot(x, result.best_fit, color="orange")
-ax1.legend()
+ax1.legend(bbox_to_anchor=(1.1, 1.05))
 plt.tight_layout()
 plt.show()
 
@@ -101,16 +101,31 @@ plt.xlabel(r"hoek ($^{\circ}$)")
 plt.ylabel("oppervlakte spectraallijn")
 plt.ylim(0, 0.35)
 plt.rcParams["figure.dpi"] = 300
+
+wavelength = 730
+corr = 10
+small_min_corr = 2
+small_max_corr = 2
+x, y, err, result = graph_and_fit(
+    wavelength, corr, small_min_corr, small_max_corr
+)
+
+
+ax1.errorbar(
+    x, y, yerr=err, fmt="o", color="blue", capsize=3, label=r"730 (H$_2$O)"
+)
+ax1.plot(x, result.best_fit, color="blue")
+
 wavelength = 531
 corr = 10
-small_min_corr = 2.3
-small_max_corr = 1.5
+small_min_corr = 2.6
+small_max_corr = 1.0
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
 )
 
 ax1.errorbar(
-    x, y, yerr=err, fmt="o", color="green", capsize=3, label="531 (?)"
+    x, y, yerr=err, fmt="o", color="green", capsize=3, label="531 (Fe-I)"
 )
 ax1.plot(x, result.best_fit, color="green")
 
