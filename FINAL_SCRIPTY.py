@@ -91,3 +91,5 @@ ax1.errorbar(
 ax1.plot(x, result.best_fit, color="orange")
 
 ax1.legend()
+
+plt.show()
