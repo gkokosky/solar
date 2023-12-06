@@ -32,7 +32,8 @@ def graph_and_fit(wavelength, corr, small_min_corr, small_max_corr):
     result = model.fit(y_mask, x=x_mask, weights=1 / err_mask, params=pars)
 
     a = result.params["a"].value
-    print(f"{wavelength}: {a}")
+    a_err = result.params["a"].stderr
+    print(f"{wavelength} nm : {a} +- {np.abs(a_err / a) * 100} %")
 
     return x_mask, y_mask, err_mask, result
 
