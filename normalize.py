@@ -172,6 +172,6 @@ class Normalize:
         return self.x, y_norm
     
 meting = Normalize(10, 1)
-x,y = meting.isolate(525, 545)
+x,y = meting.isolate(525, 535)
 plt.figure()
 plt.plot(x,y)
