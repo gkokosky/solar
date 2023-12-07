@@ -163,6 +163,6 @@ class Normalize:
 
 
 meting = Normalize(10, 1)
-x, y = meting.isolate(400, 415)
+x, y = meting.isolate(650, 720)
 plt.figure()
 plt.plot(x, y)

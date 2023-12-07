@@ -36,8 +36,14 @@ def graph_and_fit(wavelength, corr, small_min_corr, small_max_corr):
     a = result.params["a"].value
     a_err = result.params["a"].stderr
 
-    print(f"{wavelength} nm : {a} +- {np.abs(a_err / a) * 100} % \n")
-    rc.append(f"{wavelength} nm : {a} +- {np.abs(a_err / a) * 100} % \n")
+    a = np.format_float_positional(a, 6)
+    a_err = np.format_float_positional(a_err, 6)
+
+    # this oxygen line has a very broad range, but the official value is 686 nm
+    if wavelength == 695:
+        wavelength = 686
+    print(f"{wavelength} nm : {a} +- {a_err} \n")
+    rc.append(f"{wavelength} nm : {a} +- {a_err} \n")
 
     return x_mask, y_mask, err_mask, result
 
@@ -66,7 +72,7 @@ plt.ylabel("oppervlakte spectraallijn")
 plt.rcParams["figure.dpi"] = 300
 
 wavelength = 656
-corr = 10
+corr = 30
 small_min_corr = 0.8
 small_max_corr = 2.2
 
@@ -83,7 +89,7 @@ ax1.errorbar(30, 0.1939, yerr=0.0124, fmt="o", color="gray", capsize=3)
 
 
 wavelength = 493
-corr = 10
+corr = 30
 small_min_corr = 2.5
 small_max_corr = 2.5
 
@@ -97,19 +103,19 @@ ax1.errorbar(
 ax1.plot(x, result.best_fit, color="orange")
 ax1.legend(bbox_to_anchor=(1.1, 1.05))
 plt.tight_layout()
+695
 plt.show()
 
 
 fig, (ax1) = plt.subplots()
 plt.xlabel(r"hoek ($^{\circ}$)")
 plt.ylabel("oppervlakte spectraallijn")
-plt.ylim(0, 0.35)
 plt.rcParams["figure.dpi"] = 300
 
 wavelength = 730
-corr = 10
-small_min_corr = 0.8
-small_max_corr = 0.8
+corr = 30
+small_min_corr = 0.85
+small_max_corr = 0.85
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
 )
@@ -118,7 +124,27 @@ x, y, err, result = graph_and_fit(
 ax1.errorbar(
     x, y, yerr=err, fmt="o", color="blue", capsize=3, label=r"730 (H$_2$O)"
 )
+
 ax1.plot(x, result.best_fit, color="blue")
+wavelength = 695
+corr = 50
+small_min_corr = 10
+small_max_corr = 10
+x, y, err, result = graph_and_fit(
+    wavelength, corr, small_min_corr, small_max_corr
+)
+
+
+ax1.errorbar(
+    x,
+    y,
+    yerr=err,
+    fmt="o",
+    color="red",
+    capsize=3,
+    label=r"686 ($\text{O}_2$)",
+)
+ax1.plot(x, result.best_fit, color="red")
 ax1.legend()
 plt.show()
 
