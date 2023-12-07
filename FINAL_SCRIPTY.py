@@ -4,6 +4,8 @@ import numpy as np
 from absorption_at_diff_angles import angles
 from lmfit import Model
 
+rc = []
+
 
 def graph_and_fit(wavelength, corr, small_min_corr, small_max_corr):
     mini = wavelength - corr
@@ -33,7 +35,9 @@ def graph_and_fit(wavelength, corr, small_min_corr, small_max_corr):
 
     a = result.params["a"].value
     a_err = result.params["a"].stderr
-    print(f"{wavelength} nm : {a} +- {np.abs(a_err / a) * 100} %")
+
+    print(f"{wavelength} nm : {a} +- {np.abs(a_err / a) * 100} % \n")
+    rc.append(f"{wavelength} nm : {a} +- {np.abs(a_err / a) * 100} % \n")
 
     return x_mask, y_mask, err_mask, result
 
@@ -64,7 +68,7 @@ plt.rcParams["figure.dpi"] = 300
 wavelength = 656
 corr = 10
 small_min_corr = 0.8
-small_max_corr = 1.5
+small_max_corr = 2.2
 
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
@@ -104,8 +108,8 @@ plt.rcParams["figure.dpi"] = 300
 
 wavelength = 730
 corr = 10
-small_min_corr = 2
-small_max_corr = 2
+small_min_corr = 0.8
+small_max_corr = 0.8
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
 )
@@ -115,19 +119,8 @@ ax1.errorbar(
     x, y, yerr=err, fmt="o", color="blue", capsize=3, label=r"730 (H$_2$O)"
 )
 ax1.plot(x, result.best_fit, color="blue")
-
-wavelength = 531
-corr = 10
-small_min_corr = 2.6
-small_max_corr = 1.0
-x, y, err, result = graph_and_fit(
-    wavelength, corr, small_min_corr, small_max_corr
-)
-
-ax1.errorbar(
-    x, y, yerr=err, fmt="o", color="green", capsize=3, label="531 (Fe-I)"
-)
-ax1.plot(x, result.best_fit, color="green")
-
 ax1.legend()
 plt.show()
+
+with open("rc.txt", "w") as f:
+    f.writelines(rc)

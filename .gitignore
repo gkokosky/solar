@@ -154,6 +154,7 @@ cython_debug/
 
 # Data folders
 Sky_angles/
+grafieken/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
