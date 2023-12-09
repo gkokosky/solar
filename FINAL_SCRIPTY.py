@@ -67,8 +67,13 @@ ax1.errorbar(
     label=r"628 ($\text{O}_2$)",
 )
 ax1.plot(x, result.best_fit, color="blue")
-plt.xlabel(r"hoek ($^{\circ}$)")
-plt.ylabel("oppervlakte spectraallijn")
+ax1.set_ylim(0, 0.5)
+ax1.set_xticks([0, 15, 30, 45, 60, 75, 90], minor=False)
+ax1.set_xticks([5, 10, 20, 25, 35, 40, 50, 55, 65, 70, 80, 85], minor=True)
+ax1.set_yticks(np.linspace(0, 0.5, 6), minor=False)
+ax1.set_yticks(np.linspace(0, 0.5, 11), minor=True)
+plt.xlabel(r"inclinatie ($^{\circ}$)")
+plt.ylabel("equivalente breedte (nm)")
 plt.rcParams["figure.dpi"] = 300
 
 wavelength = 656
