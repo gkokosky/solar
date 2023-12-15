@@ -56,24 +56,28 @@ small_max_corr = 2
 x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
 )
-fig, (ax1) = plt.subplots()
+
+
+fig = plt.figure(figsize=(7, 6), layout="constrained")
+ax1 = fig.add_subplot(221)
 ax1.errorbar(
     x,
     y,
     yerr=err,
     fmt="o",
-    color="blue",
+    color="red",
     capsize=3,
     label=r"628 ($\text{O}_2$)",
 )
-ax1.plot(x, result.best_fit, color="blue")
+ax1.plot(x, result.best_fit, color="red")
 ax1.set_ylim(0, 0.5)
 ax1.set_xticks([0, 15, 30, 45, 60, 75, 90], minor=False)
 ax1.set_xticks([5, 10, 20, 25, 35, 40, 50, 55, 65, 70, 80, 85], minor=True)
 ax1.set_yticks(np.linspace(0, 0.5, 6), minor=False)
 ax1.set_yticks(np.linspace(0, 0.5, 11), minor=True)
-plt.xlabel(r"inclinatie ($^{\circ}$)")
-plt.ylabel("equivalente breedte (nm)")
+ax1.set_title("a", loc="left")
+ax1.set_xlabel(r"inclinatie ($^{\circ}$)")
+ax1.set_ylabel("equivalente breedte (nm)")
 plt.rcParams["figure.dpi"] = 300
 
 wavelength = 656
@@ -85,38 +89,23 @@ x, y, err, result = graph_and_fit(
     wavelength, corr, small_min_corr, small_max_corr
 )
 
-
-ax1.errorbar(x, y, yerr=err, fmt="o", color="red", capsize=3, label="656 (Hα)")
-ax1.plot(x, result.best_fit, color="red")
-
+ax4 = fig.add_subplot(222)
+ax4.errorbar(
+    x, y, yerr=err, fmt="o", color="blue", capsize=3, label="656 (Hα)"
+)
+ax4.plot(x, result.best_fit, color="blue")
+ax4.set_ylim(0, 0.5)
+ax4.set_xticks([0, 15, 30, 45, 60, 75, 90], minor=False)
+ax4.set_xticks([5, 10, 20, 25, 35, 40, 50, 55, 65, 70, 80, 85], minor=True)
+ax4.set_title("b", loc="left")
+ax4.set_yticks(np.linspace(0, 0.5, 6), minor=False)
+ax4.set_yticks(np.linspace(0, 0.5, 11), minor=True)
+ax4.set_xlabel(r"inclinatie ($^{\circ}$)")
+ax4.set_ylabel("equivalente breedte (nm)")
 # masked point
-ax1.errorbar(30, 0.1939, yerr=0.0124, fmt="o", color="gray", capsize=3)
+ax4.errorbar(30, 0.1939, yerr=0.0124, fmt="o", color="gray", capsize=3)
 
-
-wavelength = 493
-corr = 30
-small_min_corr = 2.5
-small_max_corr = 2.5
-
-x, y, err, result = graph_and_fit(
-    wavelength, corr, small_min_corr, small_max_corr
-)
-
-ax1.errorbar(
-    x, y, yerr=err, fmt="o", color="orange", capsize=3, label="493 (Fe-I)"
-)
-ax1.plot(x, result.best_fit, color="orange")
-ax1.legend(bbox_to_anchor=(1.1, 1.05))
-plt.tight_layout()
-695
-plt.show()
-
-
-fig, (ax1) = plt.subplots()
-plt.xlabel(r"hoek ($^{\circ}$)")
-plt.ylabel("oppervlakte spectraallijn")
-plt.rcParams["figure.dpi"] = 300
-
+ax3 = fig.add_subplot(223)
 wavelength = 730
 corr = 30
 small_min_corr = 0.85
@@ -126,11 +115,49 @@ x, y, err, result = graph_and_fit(
 )
 
 
-ax1.errorbar(
-    x, y, yerr=err, fmt="o", color="blue", capsize=3, label=r"730 (H$_2$O)"
+ax3.errorbar(
+    x, y, yerr=err, fmt="o", color="green", capsize=3, label=r"730 (H$_2$O)"
 )
 
-ax1.plot(x, result.best_fit, color="blue")
+ax3.plot(x, result.best_fit, color="green")
+ax3.set_xticks([0, 15, 30, 45, 60, 75, 90], minor=False)
+ax3.set_xticks([5, 10, 20, 25, 35, 40, 50, 55, 65, 70, 80, 85], minor=True)
+ax3.set_yticks(np.linspace(0, 0.5, 6), minor=False)
+ax3.set_yticks(np.linspace(0, 0.5, 11), minor=True)
+ax3.set_title("c", loc="left")
+ax3.set_ylabel("equivalente breedte (nm)")
+ax3.set_xlabel(r"inclinatie ($^{\circ}$)")
+
+ax4 = fig.add_subplot(224)
+wavelength = 493
+corr = 30
+small_min_corr = 2.5
+small_max_corr = 2.5
+
+x, y, err, result = graph_and_fit(
+    wavelength, corr, small_min_corr, small_max_corr
+)
+
+ax4.errorbar(
+    x, y, yerr=err, fmt="o", color="purple", capsize=3, label="493 (Fe-I)"
+)
+ax4.plot(x, result.best_fit, color="purple")
+ax4.set_ylim(0, 0.5)
+ax4.set_xticks([0, 15, 30, 45, 60, 75, 90], minor=False)
+ax4.set_xticks([5, 10, 20, 25, 35, 40, 50, 55, 65, 70, 80, 85], minor=True)
+ax4.set_title("d", loc="left")
+ax4.set_yticks(np.linspace(0, 0.5, 6), minor=False)
+ax4.set_yticks(np.linspace(0, 0.5, 11), minor=True)
+ax4.set_xlabel(r"inclinatie ($^{\circ}$)")
+ax4.set_ylabel("equivalente breedte (nm)")
+
+plt.show()
+
+
+fig, (ax1) = plt.subplots()
+plt.rcParams["figure.dpi"] = 300
+
+
 wavelength = 695
 corr = 50
 small_min_corr = 10
@@ -150,7 +177,13 @@ ax1.errorbar(
     label=r"686 ($\text{O}_2$)",
 )
 ax1.plot(x, result.best_fit, color="red")
-ax1.legend()
+ax1.set_xticks([0, 15, 30, 45, 60, 75, 90], minor=False)
+ax1.set_xticks([5, 10, 20, 25, 35, 40, 50, 55, 65, 70, 80, 85], minor=True)
+ax1.set_ylim(0.5, 1.5)
+ax1.set_yticks(np.linspace(0.5, 1.5, 5), minor=False)
+ax1.set_yticks(np.linspace(0.5, 1.5, 9), minor=True)
+ax1.set_xlabel(r"inclinatie ($^{\circ}$)")
+ax1.set_ylabel("equivalente breedte (nm)")
 plt.show()
 
 with open("rc.txt", "w") as f:

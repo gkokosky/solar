@@ -26,31 +26,30 @@ from neon_lines import pixel_peaks, neon_lines, result
 from normalize import Normalize
 
 meting = Normalize("06", "010")
-x_0, y_0 = meting.isolate(640, 655)
-meting.mask_peak(647, 0.5)
+x_0, y_0 = meting.isolate(645, 670)
+meting.mask_peak(656, 0.5)
 meting.smooth_function(10)
 meting.curve_fit()
 x, y = meting.normalize()
 
-plt.figure()
+plt.figure(layout="tight")
 plt.subplot(1, 2, 1)
 plt.plot(pixel_peaks, np.array(neon_lines) / 10, "o", color="black")
 plt.plot(pixel_peaks, result.best_fit / 10, color="black")
-plt.title("a")
+plt.title("a", loc="left")
 plt.xlabel("pixels")
 plt.ylabel("golflengte (nm)")
 
 plt.subplot(2, 2, 2)
 plt.plot(x_0, y_0, color="black")
-plt.title("b")
+plt.title("b", loc="left")
 plt.xlabel("golflengte (nm)")
 plt.ylabel("intensiteit")
 
 plt.subplot(2, 2, 4)
 plt.plot(x, y, color="black")
-plt.title("c")
+plt.title("c", loc="left")
 plt.xlabel("golflengte (nm)")
 plt.ylabel("intensiteit")
-plt.tight_layout()
 
 plt.savefig("neon_en_norm.png", dpi=300)

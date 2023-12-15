@@ -60,6 +60,7 @@ class Normalize:
         y_pixel = np.array(reduced_data) - reduced_dark
         x_pixel = np.array([i for i in range(len(y_pixel))])
 
+        # convert x-axis to nm using parameters from neon_lines
         self.x = a * x_pixel**2 + b * x_pixel + c
         self.x = self.x * 0.1
         self.y = np.array(y_pixel)
